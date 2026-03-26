@@ -1,5 +1,7 @@
 # Local environment
 .pytest_cache/
+
+# ADK Web local data (e.g. demos/calculator_basics/.adk/session.db)
 **/.adk/
 
 # Python
