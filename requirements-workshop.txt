@@ -1,0 +1,7 @@
+# Workshop dependencies (install inside a virtual environment).
+# Usage: pip install -r requirements-workshop.txt
+
+google-adk>=1.0.0
+jupyter>=1.1.0
+ipykernel>=6.29.0
+pytest>=8.0.0
