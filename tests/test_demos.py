@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 from google.adk.agents import LoopAgent, ParallelAgent, SequentialAgent
+from google.adk.tools.agent_tool import AgentTool
 from google.adk.tools.function_tool import FunctionTool
 
 _DEMOS_DIR = Path(__file__).resolve().parent.parent / "demos"
@@ -19,8 +20,12 @@ DEMO_NAMES = [
     "sequential_pipeline",
     "day_trip_search",
     "session_memory",
+    "sequential_state_shared",
+    "live_weather_nws",
+    "agent_as_tool_orchestrator",
     "multi_agent_coordinator",
     "structured_output",
+    "structured_persona_research",
     "hitl_sensitive_action",
     "loop_plan_refine",
     "parallel_research_synth",
@@ -133,3 +138,29 @@ def test_parallel_research_structure():
       "events_agent",
       "food_agent",
   }
+
+
+def test_sequential_state_shared_destination_key():
+  root = _load_demo_module("sequential_state_shared").root_agent
+  assert isinstance(root, SequentialAgent)
+  assert root.sub_agents[0].output_key == "destination"
+
+
+def test_agent_as_tool_wraps_sub_agent():
+  root = _load_demo_module("agent_as_tool_orchestrator").root_agent
+  assert any(isinstance(t, AgentTool) for t in root.tools)
+
+
+def test_structured_persona_schema_and_nested_tool():
+  root = _load_demo_module("structured_persona_research").root_agent
+  assert root.output_schema is not None
+  assert any(isinstance(t, AgentTool) for t in root.tools)
+
+
+def test_agent_config_yaml_loads_via_loader():
+  from google.adk.cli.utils.agent_loader import AgentLoader
+
+  loader = AgentLoader(str(_DEMOS_DIR))
+  root = loader.load_agent("agent_config_yaml")
+  assert root.name == "yaml_dice_workshop"
+  assert root.tools and len(root.tools) >= 2

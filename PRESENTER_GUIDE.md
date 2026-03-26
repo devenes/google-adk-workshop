@@ -4,6 +4,7 @@ Use this script with [`README.md`](README.md), [`CURRICULUM.md`](CURRICULUM.md),
 
 ## Quick links
 
+- Hands-on checkpoints: [`demos/CHECKPOINTS.md`](demos/CHECKPOINTS.md); learner rubric: [`RUBRIC.md`](RUBRIC.md); eval / deploy stubs: [`EVAL.md`](EVAL.md), [`DEPLOY.md`](DEPLOY.md); callbacks & memory primer: [`LEARNING_DEEP_DIVE.md`](LEARNING_DEEP_DIVE.md); MCP/OpenAPI: [`INTEGRATIONS.md`](INTEGRATIONS.md)
 - Documentation: [google.github.io/adk-docs](https://google.github.io/adk-docs/)
 - Samples (broader than this repo’s `contributing/samples`): [github.com/google/adk-samples](https://github.com/google/adk-samples)
 - Python ADK source: [github.com/google/adk-python](https://github.com/google/adk-python)

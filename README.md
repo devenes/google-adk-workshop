@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="scripts/adk-image.png" alt="Google Agent Development Kit — logo with a robot, tools, data, code, and server icons"/>
+</div>
+
 # Google ADK workshop
 
 Hands-on materials for presenting the [Google Agent Development Kit (ADK)](https://google.github.io/adk-docs/) with a **local Python virtual environment**. For the original Colab-oriented lab, see [`ADK_Learning_tools.ipynb`](ADK_Learning_tools.ipynb). For the same learning arc on your laptop, see [`notebooks/ADK_Learning_tools_venv.ipynb`](notebooks/ADK_Learning_tools_venv.ipynb) (open from repo root with path `workshop/notebooks/...`).  
@@ -43,7 +47,7 @@ pip install -r requirements-workshop.txt
 | **Gemini API (Developer API)** | `export GOOGLE_API_KEY="your-key"` | Easiest for workshops; used by demos by default. |
 | **Vertex AI** | `GOOGLE_CLOUD_PROJECT`, `GOOGLE_CLOUD_LOCATION`, and Application Default Credentials | Use when demos or your key policy require Vertex. See [ADK docs](https://google.github.io/adk-docs/). |
 
-Optional: put variables in `workshop/.env`; ADK Web loads per-agent `.env` when present.
+Optional: copy [`.env.example`](.env.example) to `workshop/.env` and fill in values. ADK Web loads per-agent `.env` when present. Never commit `.env`.
 
 ### Jupyter kernel (optional)
 
@@ -58,9 +62,11 @@ Open the venv notebook and choose this kernel.
 Structured learning paths, timing, and “what’s next” for expert topics are in [`CURRICULUM.md`](CURRICULUM.md).  
 **Unified day-long path** (both notebooks + all demo tiers): [`COURSE_BEGINNER_TO_EXPERT.md`](COURSE_BEGINNER_TO_EXPERT.md).
 
+**Extras:** checkpoint list [`demos/CHECKPOINTS.md`](demos/CHECKPOINTS.md); deeper topics [`LEARNING_DEEP_DIVE.md`](LEARNING_DEEP_DIVE.md); evaluation sample + schema notes [`eval/`](eval/) and [`EVAL.md`](EVAL.md); [`DEPLOY.md`](DEPLOY.md); learner checklist [`RUBRIC.md`](RUBRIC.md); MCP/OpenAPI notes [`INTEGRATIONS.md`](INTEGRATIONS.md).
+
 ## Runnable demos (`demos/`)
 
-Each folder is one **ADK Web** app (contains `agent.py` with `root_agent`). From `workshop`, with the venv activated:
+Each folder is one **ADK Web** app. Most define `root_agent` in `agent.py`; **`agent_config_yaml`** uses `root_agent.yaml` + `tools.py` instead. From `workshop`, with the venv activated:
 
 ```bash
 cd demos
@@ -76,10 +82,15 @@ Then pick an app in the UI (e.g. `hello_web`, `day_trip_search`).
 | [`demos/custom_tools`](demos/custom_tools) | Beginner | Function tools (weather/time, errors) | [`quickstart`](https://github.com/google/adk-python/tree/main/contributing/samples/quickstart) |
 | [`demos/static_kb_rag`](demos/static_kb_rag) | Intermediate | In-memory “RAG-shaped” retrieval | [`rag_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/rag_agent) (production RAG) |
 | [`demos/sequential_pipeline`](demos/sequential_pipeline) | Intermediate | `SequentialAgent` (outline → expand) | [`simple_sequential_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/simple_sequential_agent) |
+| [`demos/sequential_state_shared`](demos/sequential_state_shared) | Intermediate | `output_key` + `{placeholder}` between steps | [`ADK_Learning_tool_multi_agents.ipynb`](notebooks/ADK_Learning_tool_multi_agents.ipynb) |
 | [`demos/day_trip_search`](demos/day_trip_search) | Intermediate | Grounded itinerary with `google_search` | [`ADK_Learning_tools.ipynb`](ADK_Learning_tools.ipynb) Part 1 |
 | [`demos/session_memory`](demos/session_memory) | Intermediate | `ToolContext.state` across turns | [`session_state_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/session_state_agent) |
+| [`demos/live_weather_nws`](demos/live_weather_nws) | Intermediate | Real HTTP tool (`api.weather.gov`, US) | [`ADK_Learning_tools.ipynb`](ADK_Learning_tools.ipynb) (NWS-style labs) |
 | [`demos/multi_agent_coordinator`](demos/multi_agent_coordinator) | Advanced | Coordinator + specialist sub-agents | [`hello_world_ma`](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world_ma) |
+| [`demos/agent_as_tool_orchestrator`](demos/agent_as_tool_orchestrator) | Advanced | `AgentTool` — sub-agent invoked as a tool | [`tool_agent_tool_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_agent_tool_config) |
 | [`demos/structured_output`](demos/structured_output) | Advanced | Pydantic `output_schema` | [`output_schema_with_tools`](https://github.com/google/adk-python/tree/main/contributing/samples/output_schema_with_tools) |
+| [`demos/structured_persona_research`](demos/structured_persona_research) | Expert | `output_schema` + `AgentTool` specialist (no Search) | [`output_schema_with_tools`](https://github.com/google/adk-python/blob/main/contributing/samples/output_schema_with_tools/agent.py) |
+| [`demos/agent_config_yaml`](demos/agent_config_yaml) | Intermediate | Agent from `root_agent.yaml` | [`tool_functions_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_functions_config) |
 | [`demos/hitl_sensitive_action`](demos/hitl_sensitive_action) | Advanced | Tool confirmation (`require_confirmation`) | [`tool_human_in_the_loop_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_human_in_the_loop_config) |
 | [`demos/loop_plan_refine`](demos/loop_plan_refine) | Expert | `LoopAgent` + `exit_loop` (plan / critic / refiner) | [`ADK_Learning_tool_multi_agents.ipynb`](notebooks/ADK_Learning_tool_multi_agents.ipynb) |
 | [`demos/parallel_research_synth`](demos/parallel_research_synth) | Expert | `ParallelAgent` → synthesis (`output_key` merge) | same notebook |
@@ -92,8 +103,11 @@ With venv activated, from `workshop`:
 
 ```bash
 pip install -r requirements-workshop.txt
+python scripts/check_api_key_leaks.py
 pytest tests/ -v
 ```
+
+**CI:** [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs the leak check and `pytest` on push/PR when `workshop/` is the repository root.
 
 ## Learning diagrams
 

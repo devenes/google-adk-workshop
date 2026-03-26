@@ -39,6 +39,9 @@ Concepts: built-in search, session state, retrieval-style tools, deterministic m
 | I2 | [`day_trip_search`](demos/day_trip_search) | **`google_search`** grounding |
 | I3 | [`session_memory`](demos/session_memory) | **`ToolContext.state`** across turns |
 | I4 | [`sequential_pipeline`](demos/sequential_pipeline) | **`SequentialAgent`** fixed order |
+| I5 | [`sequential_state_shared`](demos/sequential_state_shared) | **`output_key`** + **`{placeholders}`** in a chain |
+| I6 | [`live_weather_nws`](demos/live_weather_nws) | Real **HTTP** function tool (US weather) |
+| I7 | [`agent_config_yaml`](demos/agent_config_yaml) | **YAML** agent config + shared `tools.py` |
 
 **Suggested time:** 45–60 minutes.
 
@@ -49,8 +52,9 @@ Concepts: LLM-routed delegation, typed output, human approval before side effect
 | Order | Demo | Skill |
 |-------|------|--------|
 | A1 | [`multi_agent_coordinator`](demos/multi_agent_coordinator) | Coordinator + specialists (`sub_agents`) |
-| A2 | [`structured_output`](demos/structured_output) | **`output_schema`** (Pydantic) for APIs/UI |
-| A3 | [`hitl_sensitive_action`](demos/hitl_sensitive_action) | **`FunctionTool(..., require_confirmation=True)`** |
+| A2 | [`agent_as_tool_orchestrator`](demos/agent_as_tool_orchestrator) | **`AgentTool`** (agent-as-a-tool) |
+| A3 | [`structured_output`](demos/structured_output) | **`output_schema`** (Pydantic) for APIs/UI |
+| A4 | [`hitl_sensitive_action`](demos/hitl_sensitive_action) | **`FunctionTool(..., require_confirmation=True)`** |
 
 **Suggested time:** 45–60 minutes.
 
@@ -60,8 +64,9 @@ Taught end-to-end in [`notebooks/ADK_Learning_tool_multi_agents.ipynb`](notebook
 
 | Order | Demo | Skill |
 |-------|------|--------|
-| E1 | [`loop_plan_refine`](demos/loop_plan_refine) | **`LoopAgent`**, critic ↔ refiner, **`exit_loop`**, `max_iterations` |
-| E2 | [`parallel_research_synth`](demos/parallel_research_synth) | **`ParallelAgent`** + **`SequentialAgent`** synthesis; `output_key` fan-in |
+| E1 | [`structured_persona_research`](demos/structured_persona_research) | **`output_schema`** with tools + nested specialist |
+| E2 | [`loop_plan_refine`](demos/loop_plan_refine) | **`LoopAgent`**, critic ↔ refiner, **`exit_loop`**, `max_iterations` |
+| E3 | [`parallel_research_synth`](demos/parallel_research_synth) | **`ParallelAgent`** + **`SequentialAgent`** synthesis; `output_key` fan-in |
 
 **Suggested time:** 45–60 minutes (plus notebook deep-read).
 
@@ -74,7 +79,7 @@ These map to **`adk-python/contributing/samples`** and cloud setup; keep as read
 | Vertex RAG corpus | Production retrieval | [`rag_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/rag_agent) |
 | Skills + SKILL.md | Packaged procedures | [`skills_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/skills_agent) |
 | Workflow / triage graphs | Mixed LLM + structure | [`workflow_triage`](https://github.com/google/adk-python/tree/main/contributing/samples/workflow_triage) |
-| MCP servers | External tool ecosystems | [`tool_mcp_stdio_notion_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_mcp_stdio_notion_config) |
+| MCP / OpenAPI | External tool ecosystems | Workshop: [`INTEGRATIONS.md`](INTEGRATIONS.md); sample [`tool_mcp_stdio_notion_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_mcp_stdio_notion_config) |
 | Agent evaluation | Regression testing | `adk eval` in [ADK README](https://github.com/google/adk-python/blob/main/README.md) |
 | Deployment | Cloud Run / Agent Engine | [Deploy docs](https://google.github.io/adk-docs/deploy/) |
 

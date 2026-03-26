@@ -55,6 +55,9 @@ flowchart LR
 | 2.3 | [`notebooks/ADK_Learning_tools_venv.ipynb`](notebooks/ADK_Learning_tools_venv.ipynb) | Part 3: memory / same session |
 | 2.4 | [`demos/session_memory`](demos/session_memory) | State across turns in Web UI |
 | 2.5 | [`demos/sequential_pipeline`](demos/sequential_pipeline) | Two-step **ordered** LLM pipeline |
+| 2.6 | [`demos/sequential_state_shared`](demos/sequential_state_shared) | Same session **`output_key`** pattern as the multi-agent notebook foodie flow |
+| 2.7 | [`demos/live_weather_nws`](demos/live_weather_nws) | Tooling **without** `google_search` (HTTP to NWS) |
+| 2.8 | [`demos/agent_config_yaml`](demos/agent_config_yaml) | Same dice/prime idea as samples, loaded from **`root_agent.yaml`** |
 
 **Colab / codelab alignment:** *Session 4 (memory)* in the [Codelab guide](https://codelabs.developers.google.com/onramp/instructions#0).
 
@@ -69,8 +72,8 @@ This matches codelab **Colab 2** themes: Router, Sequential workflows, `Sequenti
 | Part | Notebook (≈ section) | What learners do | Matching `adk web` demo |
 |------|----------------------|------------------|-------------------------|
 | 0 | Part 0: Setup | Install, auth, imports (`SequentialAgent`, `LoopAgent`, `ParallelAgent`) | (same venv as [`README`](README.md)) |
-| 1 | Part 1: Router + manual combo | Router returns a route string; Python dispatches (`if` / `elif`) | Concept-only in notebook; **`multi_agent_coordinator`** shows **LLM delegation** to sub-agents instead |
-| 2 | Part 2: `SequentialAgent` + state | `output_key`, `{placeholders}` in instructions | [`sequential_pipeline`](demos/sequential_pipeline) (outline→expand); notebook adds **foodie + transport** + search |
+| 1 | Part 1: Router + manual combo | Router returns a route string; Python dispatches (`if` / `elif`) | Runnable analogue: [`scripts/router_dispatch_demo.py`](scripts/router_dispatch_demo.py); compare with **`multi_agent_coordinator`** (LLM delegation) |
+| 2 | Part 2: `SequentialAgent` + state | `output_key`, `{placeholders}` in instructions | [`sequential_pipeline`](demos/sequential_pipeline) (outline→expand); [`sequential_state_shared`](demos/sequential_state_shared) (venue→directions); notebook adds **foodie + transport** + search |
 | 3 | LoopAgent | Critic ↔ refiner, **`exit_loop`**, `max_iterations` | [`loop_plan_refine`](demos/loop_plan_refine) (compact, no Search) |
 | 4 | ParallelAgent | Three finders + **synthesis** | [`parallel_research_synth`](demos/parallel_research_synth) (stub tools, fast) |
 
@@ -83,8 +86,9 @@ This matches codelab **Colab 2** themes: Router, Sequential workflows, `Sequenti
 | Step | Resource | Practice |
 |------|----------|----------|
 | 4.1 | [`demos/structured_output`](demos/structured_output) | Pydantic `output_schema` |
-| 4.2 | [`demos/hitl_sensitive_action`](demos/hitl_sensitive_action) | `FunctionTool(require_confirmation=True)` |
-| 4.3 | [ADK tool confirmation docs](https://google.github.io/adk-docs/tools/confirmation/) | Discuss production guardrails |
+| 4.2 | [`demos/structured_persona_research`](demos/structured_persona_research) | `output_schema` + tools + **`AgentTool`** specialist |
+| 4.3 | [`demos/hitl_sensitive_action`](demos/hitl_sensitive_action) | `FunctionTool(require_confirmation=True)` |
+| 4.4 | [ADK tool confirmation docs](https://google.github.io/adk-docs/tools/confirmation/) | Discuss production guardrails |
 
 ---
 
