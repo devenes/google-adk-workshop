@@ -1,5 +1,6 @@
 # Local environment
 .pytest_cache/
+**/.adk/
 
 # Python
 __pycache__/
