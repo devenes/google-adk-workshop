@@ -22,7 +22,7 @@ def test_sample_eval_set_validates_as_eval_set():
   case = es.eval_cases[0]
   assert case.eval_id == "add_two_decimals"
   assert case.session_input is not None
-  assert case.session_input.app_name == "calculator_basics"
+  assert case.session_input.app_name == "02-calculator_basics"
   assert case.conversation and len(case.conversation) == 1
 
 

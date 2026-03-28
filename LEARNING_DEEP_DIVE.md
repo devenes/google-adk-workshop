@@ -10,7 +10,7 @@ Short pointers for presenters and self-study; full detail lives in [ADK document
 ## Session vs memory vs state
 
 - **`Session`**: conversation thread + metadata managed by a **session service** (e.g. in-memory for notebooks, persistent in production).
-- **`ToolContext.state`**: key-value carry-over **within** a session across turns (see `session_memory` demo).
+- **`ToolContext.state`**: key-value carry-over **within** a session across turns (see `06-session_memory` demo).
 - **Memory service** (when enabled): longer-horizon retrieval across sessions — distinct from per-session state; see ADK docs on memory plugins/services.
 
 ## Rewind / branching
@@ -23,4 +23,4 @@ Short pointers for presenters and self-study; full detail lives in [ADK document
 
 ## HITL (human-in-the-loop)
 
-- **`FunctionTool(..., require_confirmation=True)`** pauses for user approval in supported clients (`hitl_sensitive_action` demo). Pair with [tool confirmation docs](https://google.github.io/adk-docs/tools/confirmation/).
+- **`FunctionTool(..., require_confirmation=True)`** pauses for user approval in supported clients (`14-hitl_sensitive_action` demo). Pair with [tool confirmation docs](https://google.github.io/adk-docs/tools/confirmation/).

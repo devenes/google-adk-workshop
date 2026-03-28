@@ -11,7 +11,6 @@
           "user_content": {
             "parts": [
               {
-                "media_resolution": null,
                 "code_execution_result": null,
                 "executable_code": null,
                 "file_data": null,
@@ -21,9 +20,7 @@
                 "text": "What is 19.5 plus 2?",
                 "thought": null,
                 "thought_signature": null,
-                "video_metadata": null,
-                "tool_call": null,
-                "tool_response": null
+                "video_metadata": null
               }
             ],
             "role": "user"
@@ -31,7 +28,6 @@
           "final_response": {
             "parts": [
               {
-                "media_resolution": null,
                 "code_execution_result": null,
                 "executable_code": null,
                 "file_data": null,
@@ -41,9 +37,7 @@
                 "text": "The sum is 21.5.",
                 "thought": null,
                 "thought_signature": null,
-                "video_metadata": null,
-                "tool_call": null,
-                "tool_response": null
+                "video_metadata": null
               }
             ],
             "role": "model"
@@ -56,9 +50,7 @@
                   "a": 19.5,
                   "b": 2
                 },
-                "name": "add_numbers",
-                "partial_args": null,
-                "will_continue": null
+                "name": "add_numbers"
               }
             ],
             "tool_responses": [],
@@ -71,7 +63,7 @@
       ],
       "conversation_scenario": null,
       "session_input": {
-        "app_name": "calculator_basics",
+        "app_name": "02-calculator_basics",
         "user_id": "workshop_eval_user",
         "state": {}
       },

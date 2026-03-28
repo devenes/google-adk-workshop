@@ -66,36 +66,36 @@ Structured learning paths, timing, and “what’s next” for expert topics are
 
 ## Runnable demos (`demos/`)
 
-Each folder is one **ADK Web** app. Most define `root_agent` in `agent.py`; **`agent_config_yaml`** uses `root_agent.yaml` + `tools.py` instead. From `workshop`, with the venv activated:
+Each folder is one **ADK Web** app. Most define `root_agent` in `agent.py`; **`10-agent_config_yaml`** uses `root_agent.yaml` + `tools.py` instead. From `workshop`, with the venv activated:
 
 ```bash
 cd demos
 adk web .
 ```
 
-Then pick an app in the UI (e.g. `hello_web`, `day_trip_search`).
+Then pick an app in the UI (e.g. `01-hello_web`, `05-day_trip_search`).
 
 | Folder | Level | What it shows | Related upstream sample |
 |--------|--------|----------------|------------------------|
-| [`demos/hello_web`](demos/hello_web) | Beginner | Minimal agent; first `adk web` run | [`quickstart`](https://github.com/google/adk-python/tree/main/contributing/samples/quickstart) |
-| [`demos/calculator_basics`](demos/calculator_basics) | Beginner | Simple numeric tools | [`hello_world`](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world) (patterns) |
-| [`demos/custom_tools`](demos/custom_tools) | Beginner | Function tools (weather/time, errors) | [`quickstart`](https://github.com/google/adk-python/tree/main/contributing/samples/quickstart) |
-| [`demos/static_kb_rag`](demos/static_kb_rag) | Intermediate | In-memory “RAG-shaped” retrieval | [`rag_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/rag_agent) (production RAG) |
-| [`demos/sequential_pipeline`](demos/sequential_pipeline) | Intermediate | `SequentialAgent` (outline → expand) | [`simple_sequential_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/simple_sequential_agent) |
-| [`demos/sequential_state_shared`](demos/sequential_state_shared) | Intermediate | `output_key` + `{placeholder}` between steps | [`ADK_Learning_tool_multi_agents.ipynb`](notebooks/ADK_Learning_tool_multi_agents.ipynb) |
-| [`demos/day_trip_search`](demos/day_trip_search) | Intermediate | Grounded itinerary with `google_search` | [`ADK_Learning_tools.ipynb`](ADK_Learning_tools.ipynb) Part 1 |
-| [`demos/session_memory`](demos/session_memory) | Intermediate | `ToolContext.state` across turns | [`session_state_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/session_state_agent) |
-| [`demos/live_weather_nws`](demos/live_weather_nws) | Intermediate | Real HTTP tool (`api.weather.gov`, US) | [`ADK_Learning_tools.ipynb`](ADK_Learning_tools.ipynb) (NWS-style labs) |
-| [`demos/multi_agent_coordinator`](demos/multi_agent_coordinator) | Advanced | Coordinator + specialist sub-agents | [`hello_world_ma`](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world_ma) |
-| [`demos/agent_as_tool_orchestrator`](demos/agent_as_tool_orchestrator) | Advanced | `AgentTool` — sub-agent invoked as a tool | [`tool_agent_tool_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_agent_tool_config) |
-| [`demos/structured_output`](demos/structured_output) | Advanced | Pydantic `output_schema` | [`output_schema_with_tools`](https://github.com/google/adk-python/tree/main/contributing/samples/output_schema_with_tools) |
-| [`demos/structured_persona_research`](demos/structured_persona_research) | Expert | `output_schema` + `AgentTool` specialist (no Search) | [`output_schema_with_tools`](https://github.com/google/adk-python/blob/main/contributing/samples/output_schema_with_tools/agent.py) |
-| [`demos/agent_config_yaml`](demos/agent_config_yaml) | Intermediate | Agent from `root_agent.yaml` | [`tool_functions_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_functions_config) |
-| [`demos/hitl_sensitive_action`](demos/hitl_sensitive_action) | Advanced | Tool confirmation (`require_confirmation`) | [`tool_human_in_the_loop_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_human_in_the_loop_config) |
-| [`demos/loop_plan_refine`](demos/loop_plan_refine) | Expert | `LoopAgent` + `exit_loop` (plan / critic / refiner) | [`ADK_Learning_tool_multi_agents.ipynb`](notebooks/ADK_Learning_tool_multi_agents.ipynb) |
-| [`demos/parallel_research_synth`](demos/parallel_research_synth) | Expert | `ParallelAgent` → synthesis (`output_key` merge) | same notebook |
+| [`demos/01-hello_web`](demos/01-hello_web) | Beginner | Minimal agent; first `adk web` run | [`quickstart`](https://github.com/google/adk-python/tree/main/contributing/samples/quickstart) |
+| [`demos/02-calculator_basics`](demos/02-calculator_basics) | Beginner | Simple numeric tools | [`hello_world`](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world) (patterns) |
+| [`demos/03-custom_tools`](demos/03-custom_tools) | Beginner | Function tools (weather/time, errors) | [`quickstart`](https://github.com/google/adk-python/tree/main/contributing/samples/quickstart) |
+| [`demos/04-static_kb_rag`](demos/04-static_kb_rag) | Intermediate | In-memory “RAG-shaped” retrieval | [`rag_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/rag_agent) (production RAG) |
+| [`demos/07-sequential_pipeline`](demos/07-sequential_pipeline) | Intermediate | `SequentialAgent` (outline → expand) | [`simple_sequential_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/simple_sequential_agent) |
+| [`demos/08-sequential_state_shared`](demos/08-sequential_state_shared) | Intermediate | `output_key` + `{placeholder}` between steps | [`ADK_Learning_tool_multi_agents.ipynb`](notebooks/ADK_Learning_tool_multi_agents.ipynb) |
+| [`demos/05-day_trip_search`](demos/05-day_trip_search) | Intermediate | Grounded itinerary with `google_search` | [`ADK_Learning_tools.ipynb`](ADK_Learning_tools.ipynb) Part 1 |
+| [`demos/06-session_memory`](demos/06-session_memory) | Intermediate | `ToolContext.state` across turns | [`session_state_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/session_state_agent) |
+| [`demos/09-live_weather_nws`](demos/09-live_weather_nws) | Intermediate | Real HTTP tool (`api.weather.gov`, US) | [`ADK_Learning_tools.ipynb`](ADK_Learning_tools.ipynb) (NWS-style labs) |
+| [`demos/11-multi_agent_coordinator`](demos/11-multi_agent_coordinator) | Advanced | Coordinator + specialist sub-agents | [`hello_world_ma`](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world_ma) |
+| [`demos/12-agent_as_tool_orchestrator`](demos/12-agent_as_tool_orchestrator) | Advanced | `AgentTool` — sub-agent invoked as a tool | [`tool_agent_tool_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_agent_tool_config) |
+| [`demos/13-structured_output`](demos/13-structured_output) | Advanced | Pydantic `output_schema` | [`output_schema_with_tools`](https://github.com/google/adk-python/tree/main/contributing/samples/output_schema_with_tools) |
+| [`demos/15-structured_persona_research`](demos/15-structured_persona_research) | Expert | `output_schema` + `AgentTool` specialist (no Search) | [`output_schema_with_tools`](https://github.com/google/adk-python/blob/main/contributing/samples/output_schema_with_tools/agent.py) |
+| [`demos/10-agent_config_yaml`](demos/10-agent_config_yaml) | Intermediate | Agent from `root_agent.yaml` | [`tool_functions_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_functions_config) |
+| [`demos/14-hitl_sensitive_action`](demos/14-hitl_sensitive_action) | Advanced | Tool confirmation (`require_confirmation`) | [`tool_human_in_the_loop_config`](https://github.com/google/adk-python/tree/main/contributing/samples/tool_human_in_the_loop_config) |
+| [`demos/16-loop_plan_refine`](demos/16-loop_plan_refine) | Expert | `LoopAgent` + `exit_loop` (plan / critic / refiner) | [`ADK_Learning_tool_multi_agents.ipynb`](notebooks/ADK_Learning_tool_multi_agents.ipynb) |
+| [`demos/17-parallel_research_synth`](demos/17-parallel_research_synth) | Expert | `ParallelAgent` → synthesis (`output_key` merge) | same notebook |
 
-**Note:** `google_search` may require an eligible Gemini model and account; if it fails in the room, use `hello_web` or `custom_tools` as fallback (see [`PRESENTER_GUIDE.md`](PRESENTER_GUIDE.md)).
+**Note:** `google_search` may require an eligible Gemini model and account; if it fails in the room, use `01-hello_web` or `03-custom_tools` as fallback (see [`PRESENTER_GUIDE.md`](PRESENTER_GUIDE.md)).
 
 ## Verify demos locally
 

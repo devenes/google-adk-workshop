@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/google/adk-python/refs/heads/main/src/google/adk/agents/config_schemas/AgentConfig.json
+name: yaml_dice_workshop
+model: gemini-2.5-flash-lite
+description: Dice and prime checks from YAML config (workshop).
+instruction: |
+  You help with dice rolls and prime checks only.
+  For a roll, call roll_die with integer sides.
+  For primes, call check_prime with a list of integers.
+  Do not invent dice results or prime tests without tools.
+tools:
+  - name: tools.roll_die
+  - name: tools.check_prime

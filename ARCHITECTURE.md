@@ -59,7 +59,7 @@ flowchart LR
   Root --> B
 ```
 
-The coordinator’s model decides **which sub-agent** should act, using ADK’s multi-agent orchestration (see [`multi_agent_coordinator`](demos/multi_agent_coordinator/agent.py)).
+The coordinator’s model decides **which sub-agent** should act, using ADK’s multi-agent orchestration (see [`11-multi_agent_coordinator`](demos/11-multi_agent_coordinator/agent.py)).
 
 ## Sequential pipeline (fixed order)
 
@@ -71,7 +71,7 @@ flowchart LR
   U --> S1 --> S2
 ```
 
-`SequentialAgent` runs each child **in list order**—no LLM routing between stages (see [`sequential_pipeline`](demos/sequential_pipeline/agent.py)). Use this when workflow order must be deterministic.
+`SequentialAgent` runs each child **in list order**—no LLM routing between stages (see [`07-sequential_pipeline`](demos/07-sequential_pipeline/agent.py)). Use this when workflow order must be deterministic.
 
 ## LoopAgent (iterate until exit)
 
@@ -84,7 +84,7 @@ flowchart LR
   R -->|exit_loop| Done[done]
 ```
 
-`LoopAgent` repeats its `sub_agents` until someone sets **`escalate`** (e.g. via the **`exit_loop`** tool) or `max_iterations` is hit. Workshop example: [`loop_plan_refine`](demos/loop_plan_refine/agent.py). Full narrative: [`ADK_Learning_tool_multi_agents.ipynb`](notebooks/ADK_Learning_tool_multi_agents.ipynb).
+`LoopAgent` repeats its `sub_agents` until someone sets **`escalate`** (e.g. via the **`exit_loop`** tool) or `max_iterations` is hit. Workshop example: [`16-loop_plan_refine`](demos/16-loop_plan_refine/agent.py). Full narrative: [`ADK_Learning_tool_multi_agents.ipynb`](notebooks/ADK_Learning_tool_multi_agents.ipynb).
 
 ## ParallelAgent (concurrent branches)
 
@@ -99,7 +99,7 @@ flowchart TB
   P --> C
 ```
 
-Branches run **concurrently**; each child can write **`output_key`** values into shared state for a later **synthesis** agent. Workshop example: [`parallel_research_synth`](demos/parallel_research_synth/agent.py).
+Branches run **concurrently**; each child can write **`output_key`** values into shared state for a later **synthesis** agent. Workshop example: [`17-parallel_research_synth`](demos/17-parallel_research_synth/agent.py).
 
 ## Session memory vs model context
 

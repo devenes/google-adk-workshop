@@ -3,7 +3,7 @@
 ## Workshop sample
 
 - **Eval set:** [`eval/calculator_basics_smoke.evalset.json`](eval/calculator_basics_smoke.evalset.json)
-- **Target app:** [`demos/calculator_basics`](demos/calculator_basics)
+- **Target app:** [`demos/02-calculator_basics`](demos/02-calculator_basics)
 
 That file is a single **`EvalSet`** document (not a bare array). ADK parses it with `google.adk.evaluation.eval_set.EvalSet`. Authoritative field definitions live in the Python modules:
 
@@ -27,20 +27,20 @@ Core workshop installs only need `google-adk` (see [`requirements-workshop.txt`]
 From the **`workshop`** directory, with `GOOGLE_API_KEY` set:
 
 ```bash
-adk eval demos/calculator_basics eval/calculator_basics_smoke.evalset.json
+adk eval demos/02-calculator_basics eval/calculator_basics_smoke.evalset.json
 ```
 
 Specific eval case ids (comma-separated after `:`):
 
 ```bash
-adk eval demos/calculator_basics eval/calculator_basics_smoke.evalset.json:add_two_decimals
+adk eval demos/02-calculator_basics eval/calculator_basics_smoke.evalset.json:add_two_decimals
 ```
 
 Optional flags: `--config_file_path` for metric weights, `--print_detailed_results`, `--eval_storage_uri` for GCS-backed sets (see `adk eval --help`).
 
 ## `adk eval` vs `adk web` package layout
 
-`adk web` loads `root_agent` from `agent.py` under each app folder. **`adk eval` currently loads `demos/<app>/__init__.py` as the entry module** and expects `from . import agent` so that `root_agent` is available as `agent.root_agent`. The calculator demo therefore includes [`demos/calculator_basics/__init__.py`](demos/calculator_basics/__init__.py). Add the same pattern to other demos if you point `adk eval` at them.
+`adk web` loads `root_agent` from `agent.py` under each app folder. **`adk eval` currently loads `demos/<app>/__init__.py` as the entry module** and expects `from . import agent` so that `root_agent` is available as `agent.root_agent`. The calculator demo therefore includes [`demos/02-calculator_basics/__init__.py`](demos/02-calculator_basics/__init__.py). Add the same pattern to other demos if you point `adk eval` at them.
 
 ## Legacy array format
 

@@ -2,6 +2,7 @@
 # Usage: pip install -r requirements-workshop.txt
 
 google-adk>=1.0.0
+python-multipart
 # Optional — for `adk eval` (heavier deps): pip install "google-adk[eval]"
 jupyter>=1.1.0
 ipykernel>=6.29.0

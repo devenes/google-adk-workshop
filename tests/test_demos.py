@@ -13,22 +13,22 @@ from google.adk.tools.function_tool import FunctionTool
 _DEMOS_DIR = Path(__file__).resolve().parent.parent / "demos"
 
 DEMO_NAMES = [
-    "hello_web",
-    "calculator_basics",
-    "custom_tools",
-    "static_kb_rag",
-    "sequential_pipeline",
-    "day_trip_search",
-    "session_memory",
-    "sequential_state_shared",
-    "live_weather_nws",
-    "agent_as_tool_orchestrator",
-    "multi_agent_coordinator",
-    "structured_output",
-    "structured_persona_research",
-    "hitl_sensitive_action",
-    "loop_plan_refine",
-    "parallel_research_synth",
+    "01-hello_web",
+    "02-calculator_basics",
+    "03-custom_tools",
+    "04-static_kb_rag",
+    "07-sequential_pipeline",
+    "05-day_trip_search",
+    "06-session_memory",
+    "08-sequential_state_shared",
+    "09-live_weather_nws",
+    "12-agent_as_tool_orchestrator",
+    "11-multi_agent_coordinator",
+    "13-structured_output",
+    "15-structured_persona_research",
+    "14-hitl_sensitive_action",
+    "16-loop_plan_refine",
+    "17-parallel_research_synth",
 ]
 
 
@@ -60,56 +60,56 @@ def test_demo_defines_root_agent(name: str):
 
 
 def test_hello_web_is_minimal():
-  root = _load_demo_module("hello_web").root_agent
+  root = _load_demo_module("01-hello_web").root_agent
   assert not root.tools
 
 
 def test_day_trip_has_search_tool():
-  root = _load_demo_module("day_trip_search").root_agent
+  root = _load_demo_module("05-day_trip_search").root_agent
   assert root.tools
   assert len(root.tools) >= 1
 
 
 def test_custom_tools_function_tools():
-  root = _load_demo_module("custom_tools").root_agent
+  root = _load_demo_module("03-custom_tools").root_agent
   assert root.tools and len(root.tools) == 2
 
 
 def test_calculator_tools():
-  root = _load_demo_module("calculator_basics").root_agent
+  root = _load_demo_module("02-calculator_basics").root_agent
   assert root.tools and len(root.tools) == 2
 
 
 def test_static_kb_one_tool():
-  root = _load_demo_module("static_kb_rag").root_agent
+  root = _load_demo_module("04-static_kb_rag").root_agent
   assert root.tools and len(root.tools) >= 1
 
 
 def test_multi_agent_structure():
-  root = _load_demo_module("multi_agent_coordinator").root_agent
+  root = _load_demo_module("11-multi_agent_coordinator").root_agent
   assert root.sub_agents and len(root.sub_agents) == 2
   names = {a.name for a in root.sub_agents}
   assert names == {"roll_agent", "prime_agent"}
 
 
 def test_session_memory_tools():
-  root = _load_demo_module("session_memory").root_agent
+  root = _load_demo_module("06-session_memory").root_agent
   assert root.tools and len(root.tools) == 2
 
 
 def test_sequential_has_two_llm_children():
-  root = _load_demo_module("sequential_pipeline").root_agent
+  root = _load_demo_module("07-sequential_pipeline").root_agent
   assert isinstance(root, SequentialAgent)
   assert len(root.sub_agents) == 2
 
 
 def test_structured_output_schema():
-  root = _load_demo_module("structured_output").root_agent
+  root = _load_demo_module("13-structured_output").root_agent
   assert root.output_schema is not None
 
 
 def test_hitl_wraps_function_tool_with_confirmation():
-  root = _load_demo_module("hitl_sensitive_action").root_agent
+  root = _load_demo_module("14-hitl_sensitive_action").root_agent
   assert len(root.tools) == 1
   tool = root.tools[0]
   assert isinstance(tool, FunctionTool)
@@ -117,7 +117,7 @@ def test_hitl_wraps_function_tool_with_confirmation():
 
 
 def test_loop_plan_refine_workflow():
-  root = _load_demo_module("loop_plan_refine").root_agent
+  root = _load_demo_module("16-loop_plan_refine").root_agent
   assert isinstance(root, SequentialAgent)
   assert len(root.sub_agents) == 2
   assert isinstance(root.sub_agents[1], LoopAgent)
@@ -127,7 +127,7 @@ def test_loop_plan_refine_workflow():
 
 
 def test_parallel_research_structure():
-  root = _load_demo_module("parallel_research_synth").root_agent
+  root = _load_demo_module("17-parallel_research_synth").root_agent
   assert isinstance(root, SequentialAgent)
   assert len(root.sub_agents) == 2
   assert isinstance(root.sub_agents[0], ParallelAgent)
@@ -141,26 +141,33 @@ def test_parallel_research_structure():
 
 
 def test_sequential_state_shared_destination_key():
-  root = _load_demo_module("sequential_state_shared").root_agent
+  root = _load_demo_module("08-sequential_state_shared").root_agent
   assert isinstance(root, SequentialAgent)
   assert root.sub_agents[0].output_key == "destination"
 
 
 def test_agent_as_tool_wraps_sub_agent():
-  root = _load_demo_module("agent_as_tool_orchestrator").root_agent
+  root = _load_demo_module("12-agent_as_tool_orchestrator").root_agent
   assert any(isinstance(t, AgentTool) for t in root.tools)
 
 
 def test_structured_persona_schema_and_nested_tool():
-  root = _load_demo_module("structured_persona_research").root_agent
+  root = _load_demo_module("15-structured_persona_research").root_agent
   assert root.output_schema is not None
   assert any(isinstance(t, AgentTool) for t in root.tools)
 
 
 def test_agent_config_yaml_loads_via_loader():
+  import sys
   from google.adk.cli.utils.agent_loader import AgentLoader
 
+  # Add the agent folder to sys.path so `tools` module is importable
+  # (folder name starts with a digit, so it can't be used as a package name)
+  agent_dir = str(_DEMOS_DIR / "10-agent_config_yaml")
+  if agent_dir not in sys.path:
+    sys.path.insert(0, agent_dir)
+
   loader = AgentLoader(str(_DEMOS_DIR))
-  root = loader.load_agent("agent_config_yaml")
+  root = loader.load_agent("10-agent_config_yaml")
   assert root.name == "yaml_dice_workshop"
   assert root.tools and len(root.tools) >= 2
