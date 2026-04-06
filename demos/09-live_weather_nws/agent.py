@@ -96,7 +96,7 @@ root_agent = Agent(
     name="nws_weather_agent",
 
     # model: Gemini model that decides to call get_live_forecast based on the user's message.
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
 
     # description: Used by orchestrators to decide when to route requests here.
     description="Answers outdoor plans using the National Weather Service API.",

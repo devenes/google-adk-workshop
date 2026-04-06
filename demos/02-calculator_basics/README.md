@@ -20,7 +20,8 @@
 ## Try it
 
 ```text
-What is (19.5 + 2) times 3?
+What is (20.5 + 2)?
+times 3?
 ```
 
 ```text
