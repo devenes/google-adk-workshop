@@ -20,7 +20,7 @@ Hands-on materials for presenting the [Google Agent Development Kit (ADK)](https
 From the repository root:
 
 ```bash
-cd workshop
+cd google-adk-workshop
 python3 -m venv .venv
 source .venv/bin/activate
 ```
@@ -28,7 +28,7 @@ source .venv/bin/activate
 On Windows:
 
 ```bash
-cd workshop
+cd google-adk-workshop
 python -m venv .venv
 .venv\Scripts\activate
 ```

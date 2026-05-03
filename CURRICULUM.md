@@ -3,7 +3,7 @@
 Work through demos in order inside a **venv** (see [`README.md`](README.md)). Each folder under [`demos/`](demos/) runs with:
 
 ```bash
-cd workshop
+cd google-adk-workshop
 source .venv/bin/activate
 cd demos
 adk web .
@@ -21,8 +21,8 @@ adk web .
 
 Concepts: `Agent`, instructions, first `adk web` session, function tools, tool schema from Python types.
 
-| Order | Demo                                           | Skill                          |
-| ----- | ---------------------------------------------- | ------------------------------ |
+| Order | Demo                                                 | Skill                          |
+| ----- | ---------------------------------------------------- | ------------------------------ |
 | B1    | [`01-hello_web`](demos/01-hello_web)                 | Plain LLM agent, no tools      |
 | B2    | [`02-calculator_basics`](demos/02-calculator_basics) | Two numeric tools; chaining    |
 | B3    | [`03-custom_tools`](demos/03-custom_tools)           | Tools returning dicts / errors |
@@ -33,8 +33,8 @@ Concepts: `Agent`, instructions, first `adk web` session, function tools, tool s
 
 Concepts: built-in search, session state, retrieval-style tools, deterministic multi-step pipelines.
 
-| Order | Demo                                                       | Skill                                              |
-| ----- | ---------------------------------------------------------- | -------------------------------------------------- |
+| Order | Demo                                                             | Skill                                              |
+| ----- | ---------------------------------------------------------------- | -------------------------------------------------- |
 | I1    | [`04-static_kb_rag`](demos/04-static_kb_rag)                     | “RAG-shaped” tool over static snippets             |
 | I2    | [`05-day_trip_search`](demos/05-day_trip_search)                 | **`google_search`** grounding                      |
 | I3    | [`06-session_memory`](demos/06-session_memory)                   | **`ToolContext.state`** across turns               |
@@ -49,8 +49,8 @@ Concepts: built-in search, session state, retrieval-style tools, deterministic m
 
 Concepts: LLM-routed delegation, typed output, human approval before side effects.
 
-| Order | Demo                                                             | Skill                                              |
-| ----- | ---------------------------------------------------------------- | -------------------------------------------------- |
+| Order | Demo                                                                   | Skill                                              |
+| ----- | ---------------------------------------------------------------------- | -------------------------------------------------- |
 | A1    | [`11-multi_agent_coordinator`](demos/11-multi_agent_coordinator)       | Coordinator + specialists (`sub_agents`)           |
 | A2    | [`12-agent_as_tool_orchestrator`](demos/12-agent_as_tool_orchestrator) | **`AgentTool`** (agent-as-a-tool)                  |
 | A3    | [`13-structured_output`](demos/13-structured_output)                   | **`output_schema`** (Pydantic) for APIs/UI         |
@@ -62,8 +62,8 @@ Concepts: LLM-routed delegation, typed output, human approval before side effect
 
 Taught end-to-end in [`notebooks/ADK_Learning_tool_multi_agents.ipynb`](notebooks/ADK_Learning_tool_multi_agents.ipynb). See the unified path in [`COURSE_BEGINNER_TO_EXPERT.md`](COURSE_BEGINNER_TO_EXPERT.md).
 
-| Order | Demo                                                               | Skill                                                                      |
-| ----- | ------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| Order | Demo                                                                     | Skill                                                                      |
+| ----- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
 | E1    | [`15-structured_persona_research`](demos/15-structured_persona_research) | **`output_schema`** with tools + nested specialist                         |
 | E2    | [`16-loop_plan_refine`](demos/16-loop_plan_refine)                       | **`LoopAgent`**, critic ↔ refiner, **`exit_loop`**, `max_iterations`       |
 | E3    | [`17-parallel_research_synth`](demos/17-parallel_research_synth)         | **`ParallelAgent`** + **`SequentialAgent`** synthesis; `output_key` fan-in |
