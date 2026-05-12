@@ -8,12 +8,12 @@
 
 ## OpenAPI / REST tools
 
-- Many teams wrap internal HTTP APIs as **function tools** (see `09-live_weather_nws` for a small public example).
+- Many teams wrap internal HTTP APIs as **function tools** (see `live_weather_nws` for a small public example).
 - For large OpenAPI specs, generate or map operations to tools following your org’s ADK patterns; see ADK docs on tool design and authentication.
 
-## Wikipedia / NWS
+## Google Search + HTTP tools
 
-- `12-agent_as_tool_orchestrator` and `15-structured_persona_research` use the **Wikipedia REST** summary API.
-- `09-live_weather_nws` uses **`api.weather.gov`** (US, rate limits apply).
+- `agent_as_tool_orchestrator` and `structured_persona_research` use the built-in **`google_search`** tool.
+- `live_weather_nws` uses **`api.weather.gov`** (US, rate limits apply).
 
 Always respect third-party terms of use and caching policies in production.

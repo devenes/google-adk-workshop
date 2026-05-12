@@ -1,4 +1,4 @@
-# 02-calculator_basics
+# calculator_basics
 
 **Level:** Beginner (first tools after a plain chat agent).
 

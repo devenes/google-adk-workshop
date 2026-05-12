@@ -10,6 +10,19 @@ from zoneinfo import ZoneInfo
 from google.adk import Agent
 
 
+def _normalize_city(city: object) -> str:
+  """Normalize user-entered city text for deterministic validation and matching."""
+  if not isinstance(city, str):
+    return ""
+  city = city.strip()
+  if not city:
+    return ""
+  city = city.split(",", 1)[0].strip()
+  if not city:
+    return ""
+  return city
+
+
 # --- Tool: get_weather ---
 # This is a "stub" tool — it returns a hardcoded answer instead of calling a real weather API.
 # Stubs are great for learning because they always produce predictable results.
@@ -22,8 +35,24 @@ def get_weather(city: str) -> dict:
   Returns:
       dict with ``status`` and either ``report`` or ``error_message``.
   """
+  city_value = _normalize_city(city)
+  if not city_value:
+    if not isinstance(city, str):
+      return {
+        "status": "error",
+        "error_message": (
+          f"Invalid city value {city!r}. Please provide a city name as text."
+        ),
+      }
+    return {
+      "status": "error",
+      "error_message": (
+        "City value is empty. Please provide a city name."
+      ),
+    }
+
   # Convert city to lowercase so "New York", "new york", "NEW YORK" all match.
-  if city.lower() == "new york":
+  if city_value.lower() == "new york":
     # Return a success dict with the canned weather report string.
     return {
         "status": "success",
@@ -35,7 +64,7 @@ def get_weather(city: str) -> dict:
   # For any other city, return an error dict — the agent will explain this to the user.
   return {
       "status": "error",
-      "error_message": f"Weather information for '{city}' is not available.",
+      "error_message": f"Weather information for '{city_value}' is not available.",
   }
 
 
@@ -50,14 +79,30 @@ def get_current_time(city: str) -> dict:
   Returns:
       dict with ``status`` and either ``report`` or ``error_message``.
   """
+  city_value = _normalize_city(city)
+  if not city_value:
+    if not isinstance(city, str):
+      return {
+        "status": "error",
+        "error_message": (
+          f"Invalid city value {city!r}. Please provide a city name as text."
+        ),
+      }
+    return {
+      "status": "error",
+      "error_message": (
+        "City value is empty. Please provide a city name."
+      ),
+    }
+
   # Only "new york" is supported in this demo — other cities return an error.
-  if city.lower() == "new york":
+  if city_value.lower() == "new york":
     tz_identifier = "America/New_York"  # IANA timezone string for New York.
   else:
     # Return an error dict for unsupported cities.
     return {
         "status": "error",
-        "error_message": f"No timezone mapping for '{city}'.",
+        "error_message": f"No timezone mapping for '{city_value}'.",
     }
 
   # Create a timezone object from the IANA identifier string.
@@ -68,7 +113,8 @@ def get_current_time(city: str) -> dict:
 
   # Format the time as a human-readable string, e.g. "2024-06-15 14:30:00 EDT-0400".
   report = (
-      f'The current time in {city} is {now.strftime("%Y-%m-%d %H:%M:%S %Z%z")}'
+      f'The current time in {city_value} is '
+      f"{now.strftime('%Y-%m-%d %H:%M:%S %Z%z')}"
   )
 
   # Return a success dict with the formatted time string.

@@ -2,6 +2,22 @@
 
 # random is Python's standard library for generating random numbers.
 import random
+import math
+
+
+def _coerce_int(value: object) -> int | None:
+  """Try converting a value into an integer for safe tool arithmetic."""
+  if isinstance(value, bool):
+    return None
+  try:
+    number = float(value)
+  except (TypeError, ValueError):
+    return None
+  if not math.isfinite(number):
+    return None
+  if not number.is_integer():
+    return None
+  return int(number)
 
 # Agent is the core ADK class for building individual agents.
 from google.adk import Agent
@@ -11,21 +27,49 @@ from google.genai import types
 
 
 # --- Tool: roll_die ---
-def roll_die(sides: int) -> int:
+def roll_die(sides: int) -> int | str:
   """Roll a die with the given number of sides and return the outcome."""
+  sides_value = _coerce_int(sides)
+  if sides_value is None:
+    return "Invalid number of sides. Please provide a whole number."
+
+  # Ensure the die has at least two sides.
+  if sides_value < 2:
+    return "Invalid number of sides. Please provide an integer greater than 1."
+
+  # Keep bounds modest to avoid pathological inputs.
+  if sides_value > 10000:
+    return "Invalid number of sides. Please use a number between 2 and 10000."
+
   # random.randint(a, b) returns an integer N such that a <= N <= b (both ends inclusive).
-  return random.randint(1, sides)
+  return random.randint(1, sides_value)
 
 
 # --- Tool: check_prime ---
 def check_prime(nums: list[int]) -> str:
   """Check which numbers in the list are prime."""
+  if not isinstance(nums, list):
+    return "Invalid input: check_prime expects a list of integers."
+
+  if not nums:
+    return "No prime numbers found."
+
   # A set is used to avoid duplicates if the same number appears twice.
   primes = set()
 
   for number in nums:
-    # Cast to int in case the model passes floats (e.g., 7.0 instead of 7).
-    number = int(number)
+    if isinstance(number, bool):
+      return "Invalid prime candidate True/False. Please provide whole numbers only."
+    try:
+      number_value = float(number)
+    except (TypeError, ValueError):
+      return f"Invalid prime candidate {number!r}. Please provide numeric values only."
+    if not math.isfinite(number_value):
+      return f"Invalid prime candidate {number!r}. Please provide numeric values only."
+    if not number_value.is_integer():
+      return f"Invalid prime candidate {number!r}. Please use whole numbers for prime checks."
+
+    number = int(number_value)
 
     # Numbers <= 1 are not prime by definition (0, 1, and negatives are excluded).
     if number <= 1:
@@ -74,7 +118,8 @@ roll_agent = Agent(
     description="Rolls dice with a requested number of sides.",
     instruction=(
         "When asked to roll a die, call roll_die with the number of sides as an "
-        "integer. Report the numeric result clearly."
+        "integer. If the result is an integer, report it clearly. "
+        "If the result is an error message, relay that message to the user."
     ),
     tools=[roll_die],                        # Only the dice-rolling tool.
     generate_content_config=_dice_safety,    # Apply relaxed safety settings.

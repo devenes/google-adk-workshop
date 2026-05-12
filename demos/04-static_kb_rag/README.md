@@ -1,4 +1,4 @@
-# 04-static_kb_rag
+# static_kb_rag
 
 **Level:** Intermediate (retrieval / “RAG-shaped” pattern without managed Vertex corpus).
 

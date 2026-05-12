@@ -1,4 +1,4 @@
-# 03-custom_tools
+# custom_tools
 
 **Goal:** **Function tools**: Python docstrings and type hints become model-visible tool declarations.
 

@@ -44,11 +44,10 @@ _critic = Agent(
         "You review plans for clarity.\n"
         # {current_plan} is replaced by ADK with the value from session state before this runs.
         "Current plan:\n{current_plan}\n\n"
-        f"If the plan has at least two lines starting with '- ' and they "
-        f"describe distinct steps, reply with this exact text and nothing "
-        # _COMPLETION_PHRASE is the exit signal — the refiner watches for this exact string.
-        f"else: {_COMPLETION_PHRASE}\n"
-        "Otherwise reply with one short sentence describing what to fix."
+        f"If the plan has at least two lines starting with '- ' and they describe "
+        f"distinct steps, reply with this exact text and nothing else: {_COMPLETION_PHRASE}.\n"
+        "If the plan does not meet this requirement, reply with one short sentence describing "
+        "what should be fixed."
     ),
     # output_key saves the critic's verdict into session state["criticism"].
     output_key="criticism",

@@ -17,7 +17,18 @@ _COORDS = {
     "palo alto": (37.4419, -122.1430),
     "lake tahoe": (39.0968, -120.0324),
     "new york": (40.7128, -74.0060),
+    "seattle": (47.6062, -122.3321),
+    "austin": (30.2672, -97.7431),
+    "los angeles": (34.0522, -118.2437),
 }
+
+
+def _normalize_city(city: object) -> str:
+  """Normalize user-entered city text to a lookup key."""
+  if not isinstance(city, str) or not city.strip():
+    return ""
+  # Keep just the first comma-separated part (e.g. "Austin, TX" -> "austin").
+  return city.lower().strip().split(",")[0].strip()
 
 
 # --- Tool: get_live_forecast ---
@@ -32,62 +43,110 @@ def get_live_forecast(city: str) -> dict:
   Returns:
       dict with status, and either ``forecast`` or ``error_message``.
   """
-  # Normalize the city name: strip whitespace and convert to lowercase for lookup.
-  key = city.lower().strip()
+  # Normalize the city name for lookup.
+  key = _normalize_city(city)
+  if not key:
+    if not isinstance(city, str):
+      return {
+        "status": "error",
+        "error_message": f"Invalid city value {city!r}. Please provide a city name as text.",
+      }
+    return {
+      "status": "error",
+      "error_message": "City value is empty. Please provide a supported city.",
+    }
 
   # Check if the city is in our hardcoded table; return an error if it is not.
   if key not in _COORDS:
+    city_label = key
     return {
         "status": "error",
         "error_message": (
-            f"Unsupported city '{city}'. Try: {', '.join(sorted(_COORDS))}."
+            f"Unsupported city '{city_label}'. Try: {', '.join(sorted(_COORDS))}."
         ),
     }
 
   # Unpack the latitude and longitude from the table.
   lat, lon = _COORDS[key]
 
+  # Step 1: Call the NWS /points endpoint to get the forecast URL for these
+  # coordinates. The API requires two hops: first metadata, then forecast details.
   try:
-    # Step 1: Call the NWS /points endpoint to get the forecast URL for these coordinates.
-    # The NWS API requires two hops: first get metadata, then get the actual forecast.
     p = requests.get(
         f"https://api.weather.gov/points/{lat},{lon}",
         headers=_HEADERS,
         timeout=10,  # Fail after 10 seconds rather than hanging forever.
     )
-    # raise_for_status() raises an exception if the HTTP response code is 4xx or 5xx.
     p.raise_for_status()
+  except requests.RequestException as exc:
+    return {
+      "status": "error",
+      "error_message": f"Unable to fetch forecast metadata: {exc}",
+    }
 
+  try:
     # Extract the forecast URL from the JSON response's "properties" section.
-    forecast_url = p.json()["properties"]["forecast"]
+    forecast_payload = p.json()
+    properties = forecast_payload.get("properties")
+  except (ValueError, TypeError, AttributeError) as exc:
+    return {
+      "status": "error",
+      "error_message": f"Invalid forecast metadata response: {exc}",
+    }
 
-    # Step 2: Fetch the actual forecast from the URL we just retrieved.
+  if not isinstance(properties, dict):
+    return {
+      "status": "error",
+      "error_message": "Invalid forecast metadata response: properties",
+    }
+
+  forecast_url = properties.get("forecast")
+  if not isinstance(forecast_url, str):
+    return {
+      "status": "error",
+      "error_message": "Forecast metadata is missing a forecast URL.",
+    }
+
+  # Step 2: Fetch the actual forecast from the URL we just retrieved.
+  try:
     f = requests.get(forecast_url, headers=_HEADERS, timeout=10)
     f.raise_for_status()
+  except requests.RequestException as exc:
+    return {
+      "status": "error",
+      "error_message": f"Unable to fetch forecast details: {exc}",
+    }
 
-    # The forecast is broken into "periods" (e.g. "Tonight", "Thursday", "Thursday Night").
+  try:
     periods = f.json().get("properties", {}).get("periods", [])
+  except (ValueError, TypeError) as exc:
+    return {
+      "status": "error",
+      "error_message": f"Invalid forecast response format: {exc}",
+    }
 
-    # Guard against an empty periods list (shouldn't happen normally, but be safe).
-    if not periods:
-      return {"status": "error", "error_message": "No forecast periods returned."}
+  # Guard against a missing or unsupported forecast payload shape.
+  if not isinstance(periods, list):
+    return {
+      "status": "error",
+      "error_message": "Invalid forecast response format: periods must be a list.",
+    }
 
-    # Take only the first (most current) forecast period.
-    first = periods[0]
+  # Guard against an empty periods list (shouldn't happen normally, but be safe).
+  if not periods:
+    return {"status": "error", "error_message": "No forecast periods returned."}
 
-    # Build a human-readable one-line summary: "Tonight: 55°F — Mostly Clear"
-    text = (
-        f"{first.get('name', 'Next')}: {first.get('temperature')}°"
-        f"{first.get('temperatureUnit', 'F')} — {first.get('shortForecast', '')}"
-    )
+  # Take only the first (most current) forecast period.
+  first = periods[0]
 
-    # Return success with the formatted forecast string.
-    return {"status": "success", "forecast": text}
+  # Build a human-readable one-line summary: "Tonight: 55°F — Mostly Clear"
+  text = (
+      f"{first.get('name', 'Next')}: {first.get('temperature')}°"
+      f"{first.get('temperatureUnit', 'F')} — {first.get('shortForecast', '')}"
+  )
 
-  except Exception as e:  # noqa: BLE001 — broad catch is intentional for a demo tool
-    # Any network error, timeout, or JSON parsing issue is caught here.
-    # We return a friendly error dict instead of crashing the agent.
-    return {"status": "error", "error_message": str(e)}
+  # Return success with the formatted forecast string.
+  return {"status": "success", "forecast": text}
 
 
 # --- Agent definition ---

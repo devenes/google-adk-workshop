@@ -1,4 +1,4 @@
-# 17-parallel_research_synth
+# parallel_research_synth
 
 > **Token streaming** should be enabled for this demo.
 
@@ -15,12 +15,12 @@
 │  │  (all three run concurrently)                                   │  │
 │  │                                                                 │  │
 │  │  ┌──────────────────┐ ┌──────────────────┐ ┌────────────────┐  │  │
-│  │  │ museum_researcher│ │events_researcher │ │food_researcher │  │  │
+│  │  │  _museum_agent  │ │  _events_agent  │ │  _food_agent  │  │  │
 │  │  │ output_key=       │ │ output_key=       │ │ output_key=     │  │  │
 │  │  │ "museum_result"  │ │ "events_result"  │ │ "food_result"  │  │  │
 │  │  │                  │ │                  │ │                │  │  │
-│  │  │ research_        │ │ research_events()│ │ research_food()│  │  │
-│  │  │ museums() (stub) │ │ (stub)           │ │ (stub)         │  │  │
+│  │  │ research_museums() │ │ research_events()│ │ research_food()│  │  │
+│  │  │ (stub)             │ │ (stub)           │ │ (stub)         │  │  │
 │  │  └──────────────────┘ └──────────────────┘ └────────────────┘  │  │
 │  └─────────────────────────────────────────────────────────────────┘  │
 │                               │                                        │
@@ -28,7 +28,7 @@
 │                               │                                        │
 │                               ▼                                        │
 │  ┌──────────────────────────────────────────────────────────────────┐ │
-│  │  synthesizer  (sub-agent, no tools)                               │ │
+│  │  _synthesis  (sub-agent, no tools)                                 │ │
 │  │  reads {museum_result}, {events_result}, {food_result}            │ │
 │  └──────────────────────────────────────────────────────────────────┘ │
 └────────────────────────────────────────────────────────────────────────┘

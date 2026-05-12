@@ -17,17 +17,25 @@ Each **invocation** in `conversation` has `user_content`, optional `final_respon
 The `adk eval` CLI requires extra dependencies:
 
 ```bash
-pip install "google-adk[eval]"
+python3 -m pip install "google-adk[eval]"
 ```
 
 Core workshop installs only need `google-adk` (see [`requirements-workshop.txt`](requirements-workshop.txt)); add the `[eval]` extra when you run evaluations.
 
 ## Commands
 
-From the **`workshop`** directory, with `GOOGLE_API_KEY` set:
+From repo root, with `GOOGLE_API_KEY` set:
 
 ```bash
 adk eval demos/02-calculator_basics eval/calculator_basics_smoke.evalset.json
+```
+
+Workshop eval contract (repo-root commands):
+
+```bash
+python3 -m pip install -r requirements-workshop.txt
+python3 -m pytest tests/ -v
+adk eval demos/<demo_folder> eval/<evalset_file>.evalset.json
 ```
 
 Specific eval case ids (comma-separated after `:`):
@@ -40,7 +48,7 @@ Optional flags: `--config_file_path` for metric weights, `--print_detailed_resul
 
 ## `adk eval` vs `adk web` package layout
 
-`adk web` loads `root_agent` from `agent.py` under each app folder. **`adk eval` currently loads `demos/<app>/__init__.py` as the entry module** and expects `from . import agent` so that `root_agent` is available as `agent.root_agent`. The calculator demo therefore includes [`demos/02-calculator_basics/__init__.py`](demos/02-calculator_basics/__init__.py). Add the same pattern to other demos if you point `adk eval` at them.
+`adk web` serves most demos from `agent.py`; YAML-backed demos like `demos/10-agent_config_yaml` use an explicit `agent.py` wrapper to load `root_agent.yaml` first. In both patterns, **`adk eval` loads `demos/<app>/__init__.py` as the entry module** and expects `from . import agent` so `agent.root_agent` is available through that shim.
 
 ## Legacy array format
 

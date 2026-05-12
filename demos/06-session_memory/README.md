@@ -1,4 +1,4 @@
-# 06-session_memory
+# session_memory
 
 **Goal:** Show **session state** through `ToolContext.state`, persisted for the same session across turns in ADK Web.
 

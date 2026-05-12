@@ -1,4 +1,4 @@
-# 14-hitl_sensitive_action
+# hitl_sensitive_action
 
 **Level:** Advanced (human-in-the-loop / **instruction-enforced confirmation**).
 

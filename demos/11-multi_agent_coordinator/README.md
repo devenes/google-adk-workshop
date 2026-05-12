@@ -1,4 +1,4 @@
-# 11-multi_agent_coordinator
+# multi_agent_coordinator
 
 **Goal:** **Multi-agent** composition: a coordinator `root_agent` with `sub_agents`, each with its own tools and instructions.
 

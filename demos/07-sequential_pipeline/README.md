@@ -1,4 +1,4 @@
-# 07-sequential_pipeline
+# sequential_pipeline
 
 **Level:** Intermediate (control flow without tool routing).
 

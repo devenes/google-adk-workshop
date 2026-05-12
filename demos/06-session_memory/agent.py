@@ -8,6 +8,13 @@ from google.adk import Agent
 from google.adk.tools.tool_context import ToolContext
 
 
+def _normalize_display_name(display_name: object) -> str:
+  """Normalize display name text before storing in session state."""
+  if not isinstance(display_name, str):
+    return ""
+  return display_name.strip()
+
+
 # --- Tool: remember_display_name ---
 # When ADK calls this function, it injects a ToolContext object for the `tool_context` parameter.
 # The state dictionary (tool_context.state) persists for the entire conversation session.
@@ -20,12 +27,19 @@ def remember_display_name(display_name: str, tool_context: ToolContext) -> str:
   Returns:
       Confirmation message.
   """
+  if not isinstance(display_name, str):
+    return "Invalid display name. Please provide a text name."
+
+  name = _normalize_display_name(display_name)
+  if not name:
+    return "Invalid display name. Name is required."
+
   # Strip leading/trailing whitespace from the name before storing it.
   # tool_context.state is a dict that survives across multiple turns in the same session.
-  tool_context.state["user_display_name"] = display_name.strip()
+  tool_context.state["user_display_name"] = name
 
   # Return a friendly confirmation — the agent will relay this to the user.
-  return f"Got it — I'll remember you as {display_name.strip()} for this session."
+  return f"Got it — I'll remember you as {name} for this session."
 
 
 # --- Tool: recall_display_name ---

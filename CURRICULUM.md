@@ -3,7 +3,7 @@
 Work through demos in order inside a **venv** (see [`README.md`](README.md)). Each folder under [`demos/`](demos/) runs with:
 
 ```bash
-cd google-adk-workshop
+cd .
 source .venv/bin/activate
 cd demos
 adk web .
@@ -15,7 +15,7 @@ adk web .
 | ---- | ----------- | ------------------------------------------------------------------------------------------ |
 | 0.1  | Virtual env | `python3 -m venv .venv`, activate, `pip install -r requirements-workshop.txt`              |
 | 0.2  | Credentials | `export GOOGLE_API_KEY=...` (or Vertex per [ADK docs](https://google.github.io/adk-docs/)) |
-| 0.3  | Smoke test  | `pytest tests/ -v` from `workshop/`                                                        |
+| 0.3  | Smoke test  | `python -m pytest tests/ -v` from repo root                                                        |
 
 ## Beginner — agents & tools
 
@@ -23,9 +23,9 @@ Concepts: `Agent`, instructions, first `adk web` session, function tools, tool s
 
 | Order | Demo                                                 | Skill                          |
 | ----- | ---------------------------------------------------- | ------------------------------ |
-| B1    | [`01-hello_web`](demos/01-hello_web)                 | Plain LLM agent, no tools      |
-| B2    | [`02-calculator_basics`](demos/02-calculator_basics) | Two numeric tools; chaining    |
-| B3    | [`03-custom_tools`](demos/03-custom_tools)           | Tools returning dicts / errors |
+| B1    | [`hello_web`](demos/01-hello_web)                 | Plain LLM agent, no tools      |
+| B2    | [`calculator_basics`](demos/02-calculator_basics) | Two numeric tools; chaining    |
+| B3    | [`custom_tools`](demos/03-custom_tools)           | Tools returning dicts / errors |
 
 **Suggested time:** 30–45 minutes + exercises.
 
@@ -35,13 +35,13 @@ Concepts: built-in search, session state, retrieval-style tools, deterministic m
 
 | Order | Demo                                                             | Skill                                              |
 | ----- | ---------------------------------------------------------------- | -------------------------------------------------- |
-| I1    | [`04-static_kb_rag`](demos/04-static_kb_rag)                     | “RAG-shaped” tool over static snippets             |
-| I2    | [`05-day_trip_search`](demos/05-day_trip_search)                 | **`google_search`** grounding                      |
-| I3    | [`06-session_memory`](demos/06-session_memory)                   | **`ToolContext.state`** across turns               |
-| I4    | [`07-sequential_pipeline`](demos/07-sequential_pipeline)         | **`SequentialAgent`** fixed order                  |
-| I5    | [`08-sequential_state_shared`](demos/08-sequential_state_shared) | **`output_key`** + **`{placeholders}`** in a chain |
-| I6    | [`09-live_weather_nws`](demos/09-live_weather_nws)               | Real **HTTP** function tool (US weather)           |
-| I7    | [`10-agent_config_yaml`](demos/10-agent_config_yaml)             | **YAML** agent config + shared `tools.py`          |
+| I1    | [`static_kb_rag`](demos/04-static_kb_rag)                     | “RAG-shaped” tool over static snippets             |
+| I2    | [`day_trip_search`](demos/05-day_trip_search)                 | **`google_search`** grounding                      |
+| I3    | [`session_memory`](demos/06-session_memory)                   | **`ToolContext.state`** across turns               |
+| I4    | [`sequential_pipeline`](demos/07-sequential_pipeline)         | **`SequentialAgent`** fixed order                  |
+| I5    | [`sequential_state_shared`](demos/08-sequential_state_shared) | **`output_key`** + **`{placeholders}`** in a chain |
+| I6    | [`live_weather_nws`](demos/09-live_weather_nws)               | Real **HTTP** function tool (US weather)           |
+| I7    | [`agent_config_yaml`](demos/10-agent_config_yaml)             | **YAML** agent config + shared `tools.py`          |
 
 **Suggested time:** 45–60 minutes.
 
@@ -51,10 +51,10 @@ Concepts: LLM-routed delegation, typed output, human approval before side effect
 
 | Order | Demo                                                                   | Skill                                              |
 | ----- | ---------------------------------------------------------------------- | -------------------------------------------------- |
-| A1    | [`11-multi_agent_coordinator`](demos/11-multi_agent_coordinator)       | Coordinator + specialists (`sub_agents`)           |
-| A2    | [`12-agent_as_tool_orchestrator`](demos/12-agent_as_tool_orchestrator) | **`AgentTool`** (agent-as-a-tool)                  |
-| A3    | [`13-structured_output`](demos/13-structured_output)                   | **`output_schema`** (Pydantic) for APIs/UI         |
-| A4    | [`14-hitl_sensitive_action`](demos/14-hitl_sensitive_action)           | **`FunctionTool(..., require_confirmation=True)`** |
+| A1    | [`multi_agent_coordinator`](demos/11-multi_agent_coordinator)       | Coordinator + specialists (`sub_agents`)           |
+| A2    | [`agent_as_tool_orchestrator`](demos/12-agent_as_tool_orchestrator) | **`AgentTool`** (agent-as-a-tool)                  |
+| A3    | [`structured_output`](demos/13-structured_output)                   | **`output_schema`** (Pydantic) for APIs/UI         |
+| A4    | [`hitl_sensitive_action`](demos/14-hitl_sensitive_action)           | **`instruction`-enforced confirmation for sensitive actions** |
 
 **Suggested time:** 45–60 minutes.
 
@@ -64,9 +64,9 @@ Taught end-to-end in [`notebooks/ADK_Learning_tool_multi_agents.ipynb`](notebook
 
 | Order | Demo                                                                     | Skill                                                                      |
 | ----- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| E1    | [`15-structured_persona_research`](demos/15-structured_persona_research) | **`output_schema`** with tools + nested specialist                         |
-| E2    | [`16-loop_plan_refine`](demos/16-loop_plan_refine)                       | **`LoopAgent`**, critic ↔ refiner, **`exit_loop`**, `max_iterations`       |
-| E3    | [`17-parallel_research_synth`](demos/17-parallel_research_synth)         | **`ParallelAgent`** + **`SequentialAgent`** synthesis; `output_key` fan-in |
+| E1    | [`structured_persona_research`](demos/15-structured_persona_research) | **`output_schema`** with tools + nested specialist                         |
+| E2    | [`loop_plan_refine`](demos/16-loop_plan_refine)                       | **`LoopAgent`**, critic ↔ refiner, **`exit_loop`**, `max_iterations`       |
+| E3    | [`parallel_research_synth`](demos/17-parallel_research_synth)         | **`ParallelAgent`** + **`SequentialAgent`** synthesis; `output_key` fan-in |
 
 **Suggested time:** 45–60 minutes (plus notebook deep-read).
 

@@ -1,5 +1,7 @@
 """Beginner demo: numeric tools only (no external APIs)."""
 
+import math
+
 # Agent is the main building block in ADK — it wraps a Gemini model with tools and instructions.
 from google.adk import Agent
 
@@ -9,7 +11,20 @@ from google.adk import Agent
 # ADK reads the function name, type hints, and docstring to build a tool schema for the model.
 # The model decides WHEN to call the tool; Python actually runs it.
 
-def add_numbers(a: float, b: float) -> float:
+def _coerce_float(value: object) -> float | None:
+  """Try converting an input to float for tool numeric arguments."""
+  if isinstance(value, bool):
+    return None
+  try:
+    number = float(value)
+  except (TypeError, ValueError):
+    return None
+  if not math.isfinite(number):
+    return None
+  return number
+
+
+def add_numbers(a: float, b: float) -> float | str:
   """Add two numbers.
 
   Args:
@@ -17,13 +32,18 @@ def add_numbers(a: float, b: float) -> float:
       b: Second operand.
 
   Returns:
-      Sum of a and b.
+      Sum of a and b, or an error message if inputs are invalid.
   """
+  left = _coerce_float(a)
+  right = _coerce_float(b)
+  if left is None or right is None:
+    return "Invalid input: add_numbers expects two numeric values."
+
   # Simply return the sum — the agent will show this result to the user.
-  return a + b
+  return left + right
 
 
-def multiply_numbers(a: float, b: float) -> float:
+def multiply_numbers(a: float, b: float) -> float | str:
   """Multiply two numbers.
 
   Args:
@@ -31,10 +51,15 @@ def multiply_numbers(a: float, b: float) -> float:
       b: Second operand.
 
   Returns:
-      Product of a and b.
+      Product of a and b, or an error message if inputs are invalid.
   """
+  left = _coerce_float(a)
+  right = _coerce_float(b)
+  if left is None or right is None:
+    return "Invalid input: multiply_numbers expects two numeric values."
+
   # Simply return the product — the agent will show this result to the user.
-  return a * b
+  return left * right
 
 
 # --- Agent definition ---

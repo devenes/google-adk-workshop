@@ -1,4 +1,4 @@
-# 13-structured_output
+# structured_output
 
 **Level:** Advanced (typed model output for UIs, APIs, and tests).
 

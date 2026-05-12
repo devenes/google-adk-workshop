@@ -13,6 +13,20 @@ from google.adk import Agent
 from google.adk.agents import ParallelAgent, SequentialAgent
 
 
+# --- Validation helpers ---
+def _normalize_city(city: object) -> str:
+  """Normalize a city value to a stripped string."""
+  if not isinstance(city, str):
+    return ""
+  city_value = city.strip()
+  if not city_value:
+    return ""
+  city_value = city_value.split(",", 1)[0].strip()
+  if not city_value:
+    return ""
+  return city_value
+
+
 # --- Stub Research Tools ---
 # These functions return hardcoded text instead of calling a real API.
 # In a production system you would replace them with live search calls.
@@ -26,9 +40,13 @@ def research_museums(city: str) -> str:
   Returns:
       Short text snippet for the synthesis step.
   """
+  city_value = _normalize_city(city)
+  if not city_value:
+    return "Invalid city input. Please provide a city name."
+
   # Hardcoded demo data so students can see parallelism without needing API keys.
   return (
-      f"Museums in {city}: City Heritage Museum (permanent exhibits), "
+      f"Museums in {city_value}: City Heritage Museum (permanent exhibits), "
       f"Science Pavilion (interactive)."
   )
 
@@ -36,15 +54,23 @@ def research_museums(city: str) -> str:
 def research_events(city: str) -> str:
   """Return demo weekend-style events for a city."""
   # Different stub data from research_museums so each parallel branch looks distinct.
+  city_value = _normalize_city(city)
+  if not city_value:
+    return "Invalid city input. Please provide a city name."
+
   return (
-      f"Events in {city}: Riverfront jazz (Sat evening), makers market (Sun AM)."
+      f"Events in {city_value}: Riverfront jazz (Sat evening), makers market (Sun AM)."
   )
 
 
 def research_food(city: str) -> str:
   """Return demo dining notes for a city."""
+  city_value = _normalize_city(city)
+  if not city_value:
+    return "Invalid city input. Please provide a city name."
+
   return (
-      f"Dining in {city}: Central Market Hall food stalls, Garden District bistro."
+      f"Dining in {city_value}: Central Market Hall food stalls, Garden District bistro."
   )
 
 

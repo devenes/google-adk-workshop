@@ -1,4 +1,4 @@
-# 09-live_weather_nws
+# live_weather_nws
 
 **Level:** Beginner–intermediate — real **HTTP** tool (like the NWS section in [`ADK_Learning_tools.ipynb`](../../ADK_Learning_tools.ipynb)).
 
@@ -7,7 +7,7 @@
 ```text
 ┌────────────────────────────────────────────────┐
 │              nws_weather_agent                  │  ← root agent
-│              model: gemini-2.0-flash            │
+│              model: gemini-2.5-flash            │
 │                                                │
 │  ┌──────────────────────────────────────────┐  │
 │  │         get_live_forecast(city)           │  │  ← HTTP tool

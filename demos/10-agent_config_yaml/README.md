@@ -1,4 +1,4 @@
-# 10-agent_config_yaml
+# agent_config_yaml
 
 **Level:** Intermediate — **Agent Config** (`root_agent.yaml`) instead of defining `root_agent` in Python.
 
@@ -36,6 +36,6 @@ Is 17 prime?
 Roll a 20-sided die and tell me if the result is prime.
 ```
 
-**Note:** The folder name `10-agent_config_yaml` is not a valid Python identifier, so `__init__.py` adds its own directory to `sys.path` at import time — this lets the YAML's `tools.*` references resolve correctly.
+**Note:** This demo uses a YAML agent definition in `root_agent.yaml`, and the local `agent.py` wrapper loads that config (including `tools.*` lookups) so `adk eval` can still resolve a stable `agent.root_agent` contract through the package shim in `__init__.py`.
 
 See [CHECKPOINTS.md](../CHECKPOINTS.md).

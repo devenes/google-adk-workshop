@@ -5,6 +5,28 @@ from google.adk import Agent
 
 
 # --- Simulated sensitive action ---
+def _is_valid_email(address: str) -> bool:
+  """Return True when the value looks like a simple recipient email address."""
+  if not address or address.startswith("@") or address.endswith("@"):
+    return False
+  if " " in address or address.count("@") != 1:
+    return False
+  local, domain = address.split("@", 1)
+  if not local or not domain:
+    return False
+  if (
+      "." not in domain
+      or domain.startswith(".")
+      or domain.endswith(".")
+      or local.startswith(".")
+      or local.endswith(".")
+      or domain.startswith("-")
+      or domain.endswith("-")
+  ):
+    return False
+  return True
+
+
 def send_email(to: str, subject: str, body: str) -> str:
   """Send an email to the specified recipient (simulated).
 
@@ -16,8 +38,33 @@ def send_email(to: str, subject: str, body: str) -> str:
   Returns:
       Confirmation string after the simulated send.
   """
-  # DEMO ONLY: prints instead of sending a real email.
-  return f"(simulated) Email sent to {to!r} with subject {subject!r} — body: {body!r}."
+  if not isinstance(to, str):
+    return "Invalid recipient. Please provide a text email address."
+
+  to_value = to.strip()
+  if not to_value:
+    return "Recipient email is required."
+
+  if not _is_valid_email(to_value):
+    return "Invalid recipient email. Please provide a valid email address."
+
+  if not isinstance(subject, str):
+    return "Invalid subject. Please provide the email subject as text."
+  subject_value = subject.strip()
+  if not subject_value:
+    return "Email subject is required."
+
+  if not isinstance(body, str):
+    return "Invalid body. Please provide the email body as text."
+  body_value = body.strip()
+  if not body_value:
+    return "Email body is required."
+
+  # DEMO ONLY: returns a simulated response instead of sending a real email.
+  return (
+      f"(simulated) Email sent to {to_value!r} with subject {subject_value!r} — "
+      f"body: {body_value!r}."
+  )
 
 
 # --- Agent definition ---

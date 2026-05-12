@@ -27,4 +27,4 @@ jobs:
         run: python scripts/check_api_key_leaks.py
 
       - name: Tests
-        run: pytest tests/ -v
+        run: python3 -m pytest tests/ -v

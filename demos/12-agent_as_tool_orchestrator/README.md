@@ -1,4 +1,4 @@
-# 12-agent_as_tool_orchestrator
+# agent_as_tool_orchestrator
 
 **Level:** Advanced — **`AgentTool`**: an agent invoked as a tool (same idea as Session 3 / Agent-as-a-Tool in the codelab).
 

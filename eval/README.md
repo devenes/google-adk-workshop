@@ -6,31 +6,42 @@ This folder holds **offline** eval definitions for the workshop. They use the **
 
 | File | Targets |
 |------|---------|
-| [`calculator_basics_smoke.evalset.json`](calculator_basics_smoke.evalset.json) | [`demos/calculator_basics`](../demos/calculator_basics) — one case, `add_numbers(19.5, 2)` |
+| [`calculator_basics_smoke.evalset.json`](calculator_basics_smoke.evalset.json) | [`demos/02-calculator_basics`](../demos/02-calculator_basics) — one case, `add_numbers(19.5, 2)` |
 
 ## Run (`adk eval`)
 
 1. Install eval extras (pulls heavier deps than `google-adk` alone):
 
    ```bash
-   pip install "google-adk[eval]"
+   python3 -m pip install "google-adk[eval]"
    ```
 
 2. Export `GOOGLE_API_KEY` (or Vertex env per ADK docs).
 
-3. From `workshop/`:
+3. From repo root:
 
    ```bash
-   adk eval demos/calculator_basics eval/calculator_basics_smoke.evalset.json
+   adk eval demos/02-calculator_basics eval/calculator_basics_smoke.evalset.json
    ```
 
    Run a subset of cases:
 
    ```bash
-   adk eval demos/calculator_basics eval/calculator_basics_smoke.evalset.json:add_two_decimals
+   adk eval demos/02-calculator_basics eval/calculator_basics_smoke.evalset.json:add_two_decimals
    ```
 
-**Agent layout:** `adk eval` imports the app folder as a package: it expects [`demos/calculator_basics/__init__.py`](../demos/calculator_basics/__init__.py) with `from . import agent` (same pattern as upstream samples). `adk web` continues to work with `agent.py` only.
+   Workshop contract for any eval run:
+
+   ```bash
+   python3 -m pip install -r requirements-workshop.txt
+   python3 -m pytest tests/ -v
+   adk eval demos/<demo_folder> eval/<evalset_file>.evalset.json
+   ```
+
+**Agent layout:** `adk eval` imports the app folder as a package: it expects each target demo folder to expose `agent.root_agent` from `__init__.py` via `from . import agent` (for example [`demos/02-calculator_basics/__init__.py`](../demos/02-calculator_basics/__init__.py)).
+YAML-backed demos include a dedicated `agent.py` wrapper (for example [`demos/10-agent_config_yaml/agent.py`](../demos/10-agent_config_yaml/agent.py)) that loads `root_agent.yaml` and is re-exported by `__init__.py`.
+
+**Workshop note:** `adk web` still loads demos from `agent.py` (or the configured YAML entry), and the same `__init__.py` package shim keeps `adk eval` loading deterministic across all workshop demos.
 
 ## Alternative: legacy JSON array
 

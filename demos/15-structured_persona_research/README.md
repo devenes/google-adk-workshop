@@ -1,4 +1,4 @@
-# 15-structured_persona_research
+# structured_persona_research
 
 **Level:** Expert — **`output_schema` on root + specialist as search tool** (pattern from [output_schema_with_tools](https://github.com/google/adk-python/blob/main/contributing/samples/output_schema_with_tools/agent.py)).
 

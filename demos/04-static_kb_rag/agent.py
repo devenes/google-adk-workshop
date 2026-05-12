@@ -34,6 +34,14 @@ def search_company_kb(query: str) -> str:
   Returns:
       Matching snippets as plain text, or a short message if nothing fits.
   """
+  if not isinstance(query, str):
+    return "search_company_kb expects a text query. Please ask a question as plain text."
+
+  # Trim and normalize user input before matching.
+  query = query.strip()
+  if not query:
+    return "Please enter a query with at least one keyword before searching."
+
   # Lowercase the query so matching is case-insensitive.
   q = query.lower()
 
