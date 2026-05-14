@@ -48,4 +48,4 @@ Planning a weekend in Lisbon—what are the top museums, current events, and loc
 I have two days in Chicago—recommend museums, events happening this season, and must-try food spots.
 ```
 
-**Contrast:** [`07-sequential_pipeline`](../07-sequential_pipeline) runs LLM stages one-by-one; here the three researchers run **concurrently** (then synthesize).
+**Contrast:** [`sequential_pipeline`](../sequential_pipeline) runs LLM stages one-by-one; here the three researchers run **concurrently** (then synthesize).

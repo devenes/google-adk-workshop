@@ -1,2 +1,2 @@
-# Module: 01-hello_web
+# Module: hello_web
 from . import agent

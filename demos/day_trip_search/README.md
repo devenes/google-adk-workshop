@@ -6,7 +6,7 @@
 
 **Workshop tie-in:** Mirrors **Part 1** of [`ADK_Learning_tools.ipynb`](../../ADK_Learning_tools.ipynb) (Colab-oriented original from repository root).
 
-**Note:** Search availability depends on your Gemini API / project settings; have [`hello_web`](../01-hello_web) ready as a fallback.
+**Note:** Search availability depends on your Gemini API / project settings; have [`hello_web`](../hello_web) ready as a fallback.
 
 ## Architecture
 

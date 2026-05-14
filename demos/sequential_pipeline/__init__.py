@@ -1,2 +1,2 @@
-# Module: 07-sequential_pipeline
+# Module: sequential_pipeline
 from . import agent

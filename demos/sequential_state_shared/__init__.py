@@ -1,2 +1,2 @@
-# Module: 08-sequential_state_shared
+# Module: sequential_state_shared
 from . import agent

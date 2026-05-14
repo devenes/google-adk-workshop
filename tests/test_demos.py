@@ -17,22 +17,22 @@ from google.adk.tools.function_tool import FunctionTool
 _DEMOS_DIR = Path(__file__).resolve().parent.parent / "demos"
 
 DEMO_NAMES = [
-    "01-hello_web",
-    "02-calculator_basics",
-    "03-custom_tools",
-    "04-static_kb_rag",
-    "07-sequential_pipeline",
-    "05-day_trip_search",
-    "06-session_memory",
-    "08-sequential_state_shared",
-    "09-live_weather_nws",
-    "12-agent_as_tool_orchestrator",
-    "11-multi_agent_coordinator",
-    "13-structured_output",
-    "15-structured_persona_research",
-    "14-hitl_sensitive_action",
-    "16-loop_plan_refine",
-    "17-parallel_research_synth",
+    "hello_web",
+    "calculator_basics",
+    "custom_tools",
+    "static_kb_rag",
+    "sequential_pipeline",
+    "day_trip_search",
+    "session_memory",
+    "sequential_state_shared",
+    "live_weather_nws",
+    "agent_as_tool_orchestrator",
+    "multi_agent_coordinator",
+    "structured_output",
+    "structured_persona_research",
+    "hitl_sensitive_action",
+    "loop_plan_refine",
+    "parallel_research_synth",
 ]
 
 
@@ -138,25 +138,25 @@ def test_demo_defines_root_agent(name: str):
 
 
 def test_hello_web_is_minimal():
-  root = _load_demo_module("01-hello_web").root_agent
+  root = _load_demo_module("hello_web").root_agent
   assert not root.tools
 
 
 def test_day_trip_has_search_tool():
-  root = _load_demo_module("05-day_trip_search").root_agent
+  root = _load_demo_module("day_trip_search").root_agent
   assert root.tools
   assert len(root.tools) >= 1
 
 
 def test_custom_tools_function_tools():
-  root = _load_demo_module("03-custom_tools").root_agent
+  root = _load_demo_module("custom_tools").root_agent
   assert root.tools and len(root.tools) == 2
 
 
 def test_calculator_tools():
-  root = _load_demo_module("02-calculator_basics").root_agent
+  root = _load_demo_module("calculator_basics").root_agent
   assert root.tools and len(root.tools) == 2
-  mod = _load_demo_module("02-calculator_basics")
+  mod = _load_demo_module("calculator_basics")
   assert mod.add_numbers(2, 3) == 5
   assert mod.add_numbers(2.5, 2.5) == 5
   assert mod.add_numbers(True, 2) == (
@@ -185,42 +185,42 @@ def test_calculator_tools():
 
 
 def test_static_kb_one_tool():
-  root = _load_demo_module("04-static_kb_rag").root_agent
+  root = _load_demo_module("static_kb_rag").root_agent
   assert root.tools and len(root.tools) >= 1
 
 
 def test_multi_agent_structure():
-  root = _load_demo_module("11-multi_agent_coordinator").root_agent
+  root = _load_demo_module("multi_agent_coordinator").root_agent
   assert root.sub_agents and len(root.sub_agents) == 2
   names = {a.name for a in root.sub_agents}
   assert names == {"roll_agent", "prime_agent"}
 
 
 def test_session_memory_tools():
-  root = _load_demo_module("06-session_memory").root_agent
+  root = _load_demo_module("session_memory").root_agent
   assert root.tools and len(root.tools) == 2
 
 
 def test_sequential_has_two_llm_children():
-  root = _load_demo_module("07-sequential_pipeline").root_agent
+  root = _load_demo_module("sequential_pipeline").root_agent
   assert isinstance(root, SequentialAgent)
   assert len(root.sub_agents) == 2
 
 
 def test_structured_output_schema():
-  root = _load_demo_module("13-structured_output").root_agent
+  root = _load_demo_module("structured_output").root_agent
   assert root.output_schema is not None
 
 
 def test_hitl_has_send_email_tool():
-  root = _load_demo_module("14-hitl_sensitive_action").root_agent
+  root = _load_demo_module("hitl_sensitive_action").root_agent
   assert len(root.tools) == 1
   # Confirmation is enforced via agent instruction; send_email is the single tool.
   assert root.tools[0].__name__ == "send_email"
 
 
 def test_loop_plan_refine_workflow():
-  root = _load_demo_module("16-loop_plan_refine").root_agent
+  root = _load_demo_module("loop_plan_refine").root_agent
   assert isinstance(root, SequentialAgent)
   assert len(root.sub_agents) == 2
   assert isinstance(root.sub_agents[1], LoopAgent)
@@ -230,7 +230,7 @@ def test_loop_plan_refine_workflow():
 
 
 def test_parallel_research_structure():
-  root = _load_demo_module("17-parallel_research_synth").root_agent
+  root = _load_demo_module("parallel_research_synth").root_agent
   assert isinstance(root, SequentialAgent)
   assert len(root.sub_agents) == 2
   assert isinstance(root.sub_agents[0], ParallelAgent)
@@ -244,24 +244,24 @@ def test_parallel_research_structure():
 
 
 def test_sequential_state_shared_destination_key():
-  root = _load_demo_module("08-sequential_state_shared").root_agent
+  root = _load_demo_module("sequential_state_shared").root_agent
   assert isinstance(root, SequentialAgent)
   assert root.sub_agents[0].output_key == "destination"
 
 
 def test_agent_as_tool_wraps_sub_agent():
-  root = _load_demo_module("12-agent_as_tool_orchestrator").root_agent
+  root = _load_demo_module("agent_as_tool_orchestrator").root_agent
   assert any(isinstance(t, AgentTool) for t in root.tools)
 
 
 def test_structured_persona_schema_and_nested_tool():
-  root = _load_demo_module("15-structured_persona_research").root_agent
+  root = _load_demo_module("structured_persona_research").root_agent
   assert root.output_schema is not None
   assert any(isinstance(t, AgentTool) for t in root.tools)
 
 
 def test_agent_config_yaml_loads_via_loader():
-  init_module = _load_demo_init_module("10-agent_config_yaml")
+  init_module = _load_demo_init_module("agent_config_yaml")
   assert hasattr(init_module, "agent")
   root = init_module.agent.root_agent
 
@@ -296,7 +296,7 @@ def test_agent_config_yaml_import_context_falls_back_to_agent_module(monkeypatch
   monkeypatch.setattr(builtins, "__import__", blocked_relative_agent_import)
   monkeypatch.setattr(importlib.util, "spec_from_file_location", counted_spec)
   with _load_demo_init_module_direct(
-      "10-agent_config_yaml", module_name, cleanup_module_names=(fallback_module_name,)
+      "agent_config_yaml", module_name, cleanup_module_names=(fallback_module_name,)
   ) as mod:
     assert hasattr(mod, "agent")
     root = mod.agent.root_agent
@@ -341,7 +341,7 @@ def test_agent_config_yaml_import_context_fallback_failure_leaks_no_agent_module
   monkeypatch.setattr(importlib.util, "spec_from_file_location", counted_spec)
   with pytest.raises(ImportError, match="dependency failure during agent load"):
     with _load_demo_init_module_direct(
-        "10-agent_config_yaml",
+        "agent_config_yaml",
         module_name,
         cleanup_module_names=(fallback_module_name,),
     ):
@@ -353,7 +353,7 @@ def test_agent_config_yaml_import_context_fallback_failure_leaks_no_agent_module
 def test_agent_config_yaml_import_context_and_error_propagation(monkeypatch):
   from google.adk.agents import config_agent_utils
 
-  demo_path = _DEMOS_DIR / "10-agent_config_yaml" / "__init__.py"
+  demo_path = _DEMOS_DIR / "agent_config_yaml" / "__init__.py"
   module_name = "workshop_demo_10_agent_config_yaml_broken_import"
   fallback_module_name = "demos_10_agent_config_yaml_agent"
   original_spec = importlib.util.spec_from_file_location
@@ -374,7 +374,7 @@ def test_agent_config_yaml_import_context_and_error_propagation(monkeypatch):
 
   with pytest.raises(ImportError, match="dependency failure"):
     with _load_demo_init_module_direct(
-        "10-agent_config_yaml",
+        "agent_config_yaml",
         module_name,
         cleanup_module_names=(fallback_module_name,),
         submodule_search_locations=[str(demo_path.parent)],
@@ -385,7 +385,7 @@ def test_agent_config_yaml_import_context_and_error_propagation(monkeypatch):
 
 
 def test_hitl_send_email_validation():
-  mod = _load_demo_module("14-hitl_sensitive_action")
+  mod = _load_demo_module("hitl_sensitive_action")
   assert mod.send_email(123, "topic", "hello") == (
       "Invalid recipient. Please provide a text email address."
   )
@@ -419,7 +419,7 @@ def test_hitl_send_email_validation():
 
 
 def test_custom_tools_input_validation():
-  mod = _load_demo_module("03-custom_tools")
+  mod = _load_demo_module("custom_tools")
   assert mod.get_weather(123) == {
       "status": "error",
       "error_message": "Invalid city value 123. Please provide a city name as text.",
@@ -466,7 +466,7 @@ def test_custom_tools_input_validation():
 
 
 def test_static_kb_input_validation():
-  mod = _load_demo_module("04-static_kb_rag")
+  mod = _load_demo_module("static_kb_rag")
   assert (
       mod.search_company_kb(123)
       == "search_company_kb expects a text query. Please ask a question as plain text."
@@ -486,7 +486,7 @@ def test_static_kb_input_validation():
 
 
 def test_session_memory_input_validation():
-  mod = _load_demo_module("06-session_memory")
+  mod = _load_demo_module("session_memory")
   ctx = _DummyToolContext()
 
   assert mod.remember_display_name(123, ctx) == (
@@ -508,7 +508,7 @@ def test_session_memory_input_validation():
 
 
 def test_live_weather_input_validation():
-  mod = _load_demo_module("09-live_weather_nws")
+  mod = _load_demo_module("live_weather_nws")
   with patch.object(mod, "requests") as mocked_requests:
     assert mod.get_live_forecast(None) == {
         "status": "error",
@@ -550,7 +550,7 @@ def test_live_weather_input_validation():
 
 
 def test_live_weather_external_error_contracts():
-  mod = _load_demo_module("09-live_weather_nws")
+  mod = _load_demo_module("live_weather_nws")
 
   with patch.object(mod.requests, "get", side_effect=requests.Timeout("timeout")) as mocked:
     result = mod.get_live_forecast("Austin")
@@ -628,7 +628,7 @@ def test_live_weather_external_error_contracts():
 
 
 def test_parallel_research_city_validation():
-  mod = _load_demo_module("17-parallel_research_synth")
+  mod = _load_demo_module("parallel_research_synth")
   assert mod.research_museums(123) == (
       "Invalid city input. Please provide a city name."
   )
@@ -642,7 +642,7 @@ def test_parallel_research_city_validation():
 
 
 def test_multi_agent_tool_validation():
-  mod = _load_demo_module("11-multi_agent_coordinator")
+  mod = _load_demo_module("multi_agent_coordinator")
   assert mod.roll_die("abc") == "Invalid number of sides. Please provide a whole number."
   assert mod.roll_die(True) == "Invalid number of sides. Please provide a whole number."
   assert mod.roll_die(1.2) == "Invalid number of sides. Please provide a whole number."
@@ -678,7 +678,7 @@ def test_multi_agent_tool_validation():
 
 
 def test_yaml_tool_validation():
-  mod = _load_demo_tools_module("10-agent_config_yaml")
+  mod = _load_demo_tools_module("agent_config_yaml")
   assert mod.roll_die("abc") == "Invalid number of sides. Please provide a whole number."
   assert mod.roll_die(True) == "Invalid number of sides. Please provide a whole number."
   assert mod.roll_die(1.2) == "Invalid number of sides. Please provide a whole number."

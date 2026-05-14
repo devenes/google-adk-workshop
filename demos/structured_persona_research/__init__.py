@@ -1,2 +1,2 @@
-# Module: 15-structured_persona_research
+# Module: structured_persona_research
 from . import agent

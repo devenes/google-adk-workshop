@@ -1,2 +1,2 @@
-# Module: 06-session_memory
+# Module: session_memory
 from . import agent

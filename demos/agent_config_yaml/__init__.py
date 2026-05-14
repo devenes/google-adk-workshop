@@ -1,4 +1,4 @@
-# Module: 10-agent_config_yaml
+# Module: agent_config_yaml
 """YAML-configured agent package for ADK Web."""
 
 import importlib.util

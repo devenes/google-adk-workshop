@@ -1,2 +1,2 @@
-# Module: 04-static_kb_rag
+# Module: static_kb_rag
 from . import agent

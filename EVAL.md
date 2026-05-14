@@ -3,7 +3,7 @@
 ## Workshop sample
 
 - **Eval set:** [`eval/calculator_basics_smoke.evalset.json`](eval/calculator_basics_smoke.evalset.json)
-- **Target app:** [`demos/02-calculator_basics`](demos/02-calculator_basics)
+- **Target app:** [`demos/calculator_basics`](demos/calculator_basics)
 
 That file is a single **`EvalSet`** document (not a bare array). ADK parses it with `google.adk.evaluation.eval_set.EvalSet`. Authoritative field definitions live in the Python modules:
 
@@ -27,7 +27,7 @@ Core workshop installs only need `google-adk` (see [`requirements-workshop.txt`]
 From repo root, with `GOOGLE_API_KEY` set:
 
 ```bash
-adk eval demos/02-calculator_basics eval/calculator_basics_smoke.evalset.json
+adk eval demos/calculator_basics eval/calculator_basics_smoke.evalset.json
 ```
 
 Workshop eval contract (repo-root commands):
@@ -41,14 +41,14 @@ adk eval demos/<demo_folder> eval/<evalset_file>.evalset.json
 Specific eval case ids (comma-separated after `:`):
 
 ```bash
-adk eval demos/02-calculator_basics eval/calculator_basics_smoke.evalset.json:add_two_decimals
+adk eval demos/calculator_basics eval/calculator_basics_smoke.evalset.json:add_two_decimals
 ```
 
 Optional flags: `--config_file_path` for metric weights, `--print_detailed_results`, `--eval_storage_uri` for GCS-backed sets (see `adk eval --help`).
 
 ## `adk eval` vs `adk web` package layout
 
-`adk web` serves most demos from `agent.py`; YAML-backed demos like `demos/10-agent_config_yaml` use an explicit `agent.py` wrapper to load `root_agent.yaml` first. In both patterns, **`adk eval` loads `demos/<app>/__init__.py` as the entry module** and expects `from . import agent` so `agent.root_agent` is available through that shim.
+`adk web` serves most demos from `agent.py`; YAML-backed demos like `demos/agent_config_yaml` use an explicit `agent.py` wrapper to load `root_agent.yaml` first. In both patterns, **`adk eval` loads `demos/<app>/__init__.py` as the entry module** and expects `from . import agent` so `agent.root_agent` is available through that shim.
 
 ## Legacy array format
 

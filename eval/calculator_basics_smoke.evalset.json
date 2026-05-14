@@ -63,7 +63,7 @@
       ],
       "conversation_scenario": null,
       "session_input": {
-        "app_name": "02-calculator_basics",
+        "app_name": "calculator_basics",
         "user_id": "workshop_eval_user",
         "state": {}
       },
