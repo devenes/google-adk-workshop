@@ -93,19 +93,52 @@ def _region() -> str:
 # human-readable display names shown in the Streamlit UI radio button.
 # Keys   = model IDs sent to the Gemini API
 # Values = friendly names displayed to the user
+# Helper to resolve placeholders if they were not replaced during deployment
+def _resolve_model_id(model_id: str) -> str:
+    if model_id.startswith("__") and model_id.endswith("__"):
+        if "FLASH_LITE" in model_id:
+            return "gemini-2.5-flash-lite"
+        if "PRO" in model_id:
+            return "gemini-2.5-pro"
+        if "FLASH" in model_id:
+            return "gemini-2.5-flash"
+    return model_id
+
+
+def _resolve_model_name(model_id: str, name: str) -> str:
+    if name.startswith("__") and name.endswith("__"):
+        if "FLASH_LITE" in model_id:
+            return "Gemini 2.5 Flash-Lite"
+        if "PRO" in model_id:
+            return "Gemini 2.5 Pro"
+        if "FLASH" in model_id:
+            return "Gemini 2.5 Flash"
+    return name
+
+
+# MODELS maps model IDs (placeholder strings replaced at deploy time) to
+# human-readable display names shown in the Streamlit UI radio button.
+# Keys   = model IDs sent to the Gemini API
+# Values = friendly names displayed to the user
 MODELS = {
-    "__GEMINI_FLASH_LITE_MODEL_ID__": "__GEMINI_FLASH_LITE_MODEL_NAME__",
-    "__GEMINI_PRO_MODEL_ID__": "__GEMINI_PRO_MODEL_NAME__",
-    "__GEMINI_FLASH_MODEL_ID__": "__GEMINI_FLASH_MODEL_NAME__",
+    _resolve_model_id(k): _resolve_model_name(k, v)
+    for k, v in {
+        "__GEMINI_FLASH_LITE_MODEL_ID__": "__GEMINI_FLASH_LITE_MODEL_NAME__",
+        "__GEMINI_PRO_MODEL_ID__": "__GEMINI_PRO_MODEL_NAME__",
+        "__GEMINI_FLASH_MODEL_ID__": "__GEMINI_FLASH_MODEL_NAME__",
+    }.items()
 }
 
 # THINKING_BUDGET_MODELS is the set of model IDs that support "thinking budget"
 # (extended internal reasoning before generating the final response).
 # Only these models will display the thinking budget controls in the UI.
 THINKING_BUDGET_MODELS = {
-    "__GEMINI_PRO_MODEL_ID__",
-    "__GEMINI_FLASH_MODEL_ID__",
-    "__GEMINI_FLASH_LITE_MODEL_ID__",
+    _resolve_model_id(k)
+    for k in {
+        "__GEMINI_PRO_MODEL_ID__",
+        "__GEMINI_FLASH_MODEL_ID__",
+        "__GEMINI_FLASH_LITE_MODEL_ID__",
+    }
 }
 
 
@@ -747,6 +780,8 @@ If instructions include buttons, also explain where those buttons are physically
                             prompt,
                         ],
                     ).text
+                    if response:
+                        st.markdown(response)
         with tab2:
             st.write("Prompt used:")
             st.code(prompt, language="markdown")
@@ -809,12 +844,10 @@ If instructions include buttons, also explain where those buttons are physically
                 ):
                     response = client.models.generate_content(
                         model=selected_model,
-                        contents=[
-                            Part.from_uri(file_uri=er_diag_uri, mime_type="image/jpeg"),
-                            content,
-                        ],
+                        contents=content,
                     ).text
-                    st.markdown(response)
+                    if response:
+                        st.markdown(response)
         with tab2:
             st.write("Prompt used:")
             st.code(content, language="markdown")
