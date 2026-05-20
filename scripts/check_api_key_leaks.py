@@ -53,6 +53,20 @@ _ALLOW_SUBSTRINGS = (
 )
 
 
+def _is_tracked_by_git(path: Path) -> bool:
+  try:
+    import subprocess
+    res = subprocess.run(
+        ["git", "ls-files", "--error-unmatch", str(path)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return res.returncode == 0
+  except Exception:
+    return False
+
+
 def _iter_files(root: Path):
   for p in root.rglob("*"):
     if not p.is_file():
@@ -60,6 +74,8 @@ def _iter_files(root: Path):
     if any(part in _SKIP_DIR_NAMES for part in p.parts):
       continue
     if p.name == ".env.example":
+      continue
+    if p.name == ".env" and not _is_tracked_by_git(p):
       continue
     suf = p.suffix.lower()
     if suf not in _TEXT_SUFFIXES and p.name != ".env":

@@ -2,8 +2,8 @@
 """Explicit router-style dispatch (no LLM router). Aligns with notebook Router pattern.
 
 Usage:
-  python workshop/scripts/router_dispatch_demo.py add 3 5
-  python workshop/scripts/router_dispatch_demo.py weather seattle
+  python scripts/router_dispatch_demo.py math add 3 5
+  python scripts/router_dispatch_demo.py weather seattle
 """
 
 from __future__ import annotations
