@@ -1,4 +1,13 @@
-"""Beginner demo: numeric tools only (no external APIs)."""
+"""Beginner demo: four arithmetic tools showing the core ADK function-tool pattern.
+
+KEY CONCEPT — How ADK converts a Python function into a Gemini tool:
+  1. Function name       → tool name (the model uses this to select the right tool).
+  2. Parameter type hints → JSON schema sent to Gemini for input validation.
+  3. Docstring (Args)    → natural-language descriptions Gemini reads to fill arguments.
+  4. Return value        → passed back to the model as the tool's result.
+
+No decorators or registration calls needed — just list functions in tools=[].
+"""
 
 import math
 
@@ -62,6 +71,43 @@ def multiply_numbers(a: float, b: float) -> float | str:
   return left * right
 
 
+def subtract_numbers(a: float, b: float) -> float | str:
+  """Subtract the second number from the first.
+
+  Args:
+      a: Number to subtract from (minuend).
+      b: Number to subtract (subtrahend).
+
+  Returns:
+      Difference a − b, or an error message if inputs are invalid.
+  """
+  left = _coerce_float(a)
+  right = _coerce_float(b)
+  if left is None or right is None:
+    return "Invalid input: subtract_numbers expects two numeric values."
+  return left - right
+
+
+def divide_numbers(a: float, b: float) -> float | str:
+  """Divide the first number by the second.
+
+  Args:
+      a: Dividend (number to divide).
+      b: Divisor (number to divide by). Must not be zero.
+
+  Returns:
+      Quotient a ÷ b, or an error message if inputs are invalid or b is zero.
+  """
+  left = _coerce_float(a)
+  right = _coerce_float(b)
+  if left is None or right is None:
+    return "Invalid input: divide_numbers expects two numeric values."
+  # Guard against division by zero — Python raises ZeroDivisionError without this check.
+  if right == 0:
+    return "Cannot divide by zero."
+  return left / right
+
+
 # --- Agent definition ---
 # ADK looks for a variable named root_agent when you run `adk web` or `adk run`.
 root_agent = Agent(
@@ -76,11 +122,12 @@ root_agent = Agent(
 
     # instruction: System-level instructions that shape the agent's behavior every turn.
     instruction=(
-        "You are a calculator assistant. For any arithmetic the user asks, "
-        "call add_numbers and/or multiply_numbers. Do not invent results."
+        "You are a calculator assistant. Use add_numbers, subtract_numbers, "
+        "multiply_numbers, and divide_numbers for any arithmetic the user asks. "
+        "Always call a tool for every calculation — do not compute in your head. "
+        "If the user requests multiple operations, chain the tool calls as needed."
     ),
 
-    # tools: The list of Python functions the agent is allowed to call.
-    # ADK automatically converts each function into a Gemini function-calling tool.
-    tools=[add_numbers, multiply_numbers],
+    # tools: All four arithmetic functions. ADK converts each to a Gemini tool automatically.
+    tools=[add_numbers, subtract_numbers, multiply_numbers, divide_numbers],
 )
