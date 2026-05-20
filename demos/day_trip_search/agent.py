@@ -5,6 +5,10 @@ from google.adk import Agent
 
 # google_search is a built-in ADK tool that lets the agent search the web via Google.
 # It is pre-built — you do not write any Python code for it; just pass it in tools=[].
+#
+# PREREQUISITE:
+# Using google_search requires that your GEMINI_API_KEY / GOOGLE_GENAI_API_KEY
+# is linked to a Google Cloud project with Google Search grounding enabled.
 from google.adk.tools import google_search
 
 # root_agent is the special name ADK looks for when starting with `adk web` or `adk run`.
@@ -33,6 +37,7 @@ Guidelines:
 """,
 
     # tools: Pass the built-in google_search tool so the agent can look up real-world info.
-    # The model decides when to search and what query to use.
+    # The model decides when to search and what query to use. No Python code is needed
+    # for google_search — ADK handles the query-execution loop natively.
     tools=[google_search],
 )

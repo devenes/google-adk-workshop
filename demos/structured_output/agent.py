@@ -29,6 +29,8 @@ class CityProfile(BaseModel):
 
   # list[str] field: up to three interesting facts about the city.
   # max_length=3 tells Pydantic to reject lists longer than 3 items.
+  # Gemini receives this constraint as part of the JSON schema, so the model itself
+  # is restricted to producing at most 3 items in the list.
   highlights: list[str] = Field(
       description="Up to three notable traits or facts",
       max_length=3,
@@ -55,5 +57,10 @@ root_agent = Agent(
 
     # output_schema: Forces the model to return a JSON object matching CityProfile.
     # There are no tools= here — the model fills the schema directly from its knowledge.
+    #
+    # CRITICAL ADK RULE: You cannot combine output_schema with function tools= on the same Agent.
+    # If an agent needs to call function tools AND return a structured JSON schema, you must
+    # use an orchestrator agent with output_schema that calls a specialist agent with tools.
+    # See structured_persona_research for an example of this workaround.
     output_schema=CityProfile,
 )

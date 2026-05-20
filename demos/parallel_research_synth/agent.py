@@ -1,8 +1,8 @@
 """Expert demo: ParallelAgent (stub researchers) → synthesis agent.
 
-Aligns with "Parallel Power with ParallelAgent" in
-``notebooks/ADK_Learning_tool_multi_agents.ipynb``. Uses stub tools instead of
-Search so concurrency is easy to demonstrate without extra API setup.
+Aligns with parallel execution patterns in the ADK tutorials.
+Uses stub tools instead of Search so concurrency is easy to demonstrate
+without extra API setup.
 """
 
 # Agent is the standard single-model agent from ADK.
@@ -52,8 +52,16 @@ def research_museums(city: str) -> str:
 
 
 def research_events(city: str) -> str:
-  """Return demo weekend-style events for a city."""
+  """Return demo weekend-style events for a city.
+
+  Args:
+      city: City to research.
+
+  Returns:
+      Short text snippet for the synthesis step.
+  """
   # Different stub data from research_museums so each parallel branch looks distinct.
+  # Note: Stub data is fixed regardless of city — in production, call a real API here.
   city_value = _normalize_city(city)
   if not city_value:
     return "Invalid city input. Please provide a city name."
@@ -64,7 +72,15 @@ def research_events(city: str) -> str:
 
 
 def research_food(city: str) -> str:
-  """Return demo dining notes for a city."""
+  """Return demo dining notes for a city.
+
+  Args:
+      city: City to research.
+
+  Returns:
+      Short text snippet for the synthesis step.
+  """
+  # Note: Stub data is fixed regardless of city — in production, call a real API here.
   city_value = _normalize_city(city)
   if not city_value:
     return "Invalid city input. Please provide a city name."
@@ -123,6 +139,8 @@ _parallel_block = ParallelAgent(
 
 # --- Synthesis Agent ---
 # Runs AFTER the parallel block. Reads all three results via {placeholders} and merges them.
+# ADK guarantees that all sub-agents in the ParallelAgent block complete fully before
+# the synthesis agent is invoked, preventing any race conditions.
 _synthesis = Agent(
     name="synthesis_agent",
     model="gemini-2.5-flash-lite",

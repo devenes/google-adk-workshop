@@ -3,9 +3,14 @@
 # Agent is the standard single-model agent from ADK.
 from google.adk import Agent
 
-# SequentialAgent chains multiple agents so they run one after the other.
-# Each sub-agent's output is added to the conversation before the next one starts.
 from google.adk.agents import SequentialAgent
+
+# KEY CONCEPT — Conversation History vs. Session State:
+# In this demo, sub-agents communicate purely by reading the prior conversation history.
+# ADK automatically passes the history of the current interaction to the next agent in the list.
+# Contrast this with sequential_state_shared, which saves outputs to specific keys
+# in the session state dictionary and injects them as {placeholders}.
+
 
 
 # --- Step 1: Outline Drafter ---
@@ -45,4 +50,7 @@ root_agent = SequentialAgent(
 
     # sub_agents: The ordered list of agents to run. Order matters!
     sub_agents=[_outline_agent, _expand_agent],
+
+    # Note: SequentialAgent is a pure flow controller and does not have a model of its own.
+    # Therefore, no model= parameter is passed to SequentialAgent.
 )

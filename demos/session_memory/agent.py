@@ -23,6 +23,8 @@ def remember_display_name(display_name: str, tool_context: ToolContext) -> str:
 
   Args:
       display_name: Name the user wants to be called.
+      tool_context: The ADK runtime context injected automatically.
+                    Not passed or seen by the LLM.
 
   Returns:
       Confirmation message.
@@ -34,7 +36,7 @@ def remember_display_name(display_name: str, tool_context: ToolContext) -> str:
   if not name:
     return "Invalid display name. Name is required."
 
-  # Strip leading/trailing whitespace from the name before storing it.
+  # Store directly since name is already normalized/stripped.
   # tool_context.state is a dict that survives across multiple turns in the same session.
   tool_context.state["user_display_name"] = name
 
@@ -43,8 +45,18 @@ def remember_display_name(display_name: str, tool_context: ToolContext) -> str:
 
 
 # --- Tool: recall_display_name ---
+# Note: This tool accepts no user-facing arguments, demonstrating how zero-argument tools
+# are registered. The LLM simply calls it to retrieve state.
 def recall_display_name(tool_context: ToolContext) -> str:
-  """Recall the display name stored for this session, if any."""
+  """Recall the display name stored for this session, if any.
+
+  Args:
+      tool_context: The ADK runtime context injected automatically.
+                    Not passed or seen by the LLM.
+
+  Returns:
+      The user's display name or a guidance string if not set.
+  """
   # Look up the name stored by remember_display_name.
   # dict.get() returns None (not an error) if the key hasn't been set yet.
   name = tool_context.state.get("user_display_name")

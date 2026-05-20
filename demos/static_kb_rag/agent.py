@@ -32,7 +32,8 @@ def search_company_kb(query: str) -> str:
       query: User question or keywords (e.g. billing, rate limit, retention).
 
   Returns:
-      Matching snippets as plain text, or a short message if nothing fits.
+      Matching snippets as plain text. Invalid inputs or missing queries return
+      a helpful guidance string rather than raising exceptions.
   """
   if not isinstance(query, str):
     return "search_company_kb expects a text query. Please ask a question as plain text."
@@ -59,16 +60,15 @@ def search_company_kb(query: str) -> str:
         or key.replace("_", "") in q.replace(" ", "")  # 2. Compact match ignoring spaces.
         or any(token in text.lower() for token in q.split() if len(token) > 3)
         # 3. Any query word longer than 3 letters appears inside the snippet text.
+        # We skip short words (like 'is', 'the', 'of') to avoid false positive matches.
     ):
       # Format the matching snippet with a Markdown heading and add to results list.
       hits.append(f"### {readable}\n{text}")
 
   # If no snippets matched, tell the agent which topics ARE available.
   if not hits:
-    return (
-        "No snippets matched. Topics in this demo KB: billing_cycle, "
-        "api_rate_limits, data_retention."
-    )
+    topics = ", ".join(_KB_SNIPPETS.keys())
+    return f"No snippets matched. Topics in this demo KB: {topics}."
 
   # Join all matching snippets with a blank line between them and return as one string.
   return "\n\n".join(hits)

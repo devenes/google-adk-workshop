@@ -13,10 +13,22 @@ from google.adk.tools.agent_tool import AgentTool
 # google_search is a built-in ADK tool — no API key or setup required beyond ADK itself.
 from google.adk.tools import google_search
 
+# KEY CONCEPT — AgentTool vs. Sub-agents (sub_agents=[...]):
+#   - Use sub_agents=[...] (SequentialAgent / ParallelAgent) when you have a structured,
+#     fixed-step pipeline where every step must execute in a predefined order.
+#   - Use AgentTool (this demo) when the supervisor/orchestrator agent needs to dynamically
+#     decide whether and when to delegate to a specialist agent, depending on the user request.
+#     The specialist acts as a tool the orchestrator can call zero, one, or multiple times.
+
+
 
 # --- Tool: get_current_year ---
 def get_current_year() -> str:
-  """Return the current calendar year."""
+  """Return the current calendar year.
+
+  Returns:
+      The 4-digit calendar year as a string (e.g. '2026').
+  """
   # datetime.datetime.now() gives the current local date and time.
   # .year extracts just the 4-digit year integer; str() converts it to text.
   return str(datetime.datetime.now().year)
@@ -55,7 +67,9 @@ root_agent = Agent(
     ),
     tools=[
         # AgentTool wraps _specialist so the orchestrator can call it like a function.
-        # skip_summarization=True means the specialist's full response is passed back as-is.
+        # skip_summarization=True tells ADK to pass the specialist's exact response string back
+        # to the orchestrator. If set to False, ADK will run a separate LLM call to summarize
+        # the specialist's output first, which is slower and can drop structured details.
         AgentTool(_specialist, skip_summarization=True),
 
         # get_current_year is a simple Python function tool used directly by the orchestrator.

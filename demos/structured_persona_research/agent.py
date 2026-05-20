@@ -33,6 +33,8 @@ class PersonInfo(BaseModel):
   location: str = Field(description="City/country or 'unknown'")
 
   # A brief summary — no more than two sentences.
+  # Note: Pydantic cannot natively enforce sentence counts, so this constraint is
+  # enforced via the system instructions provided to the agent model.
   biography: str = Field(description="Two short sentences max")
 
 
@@ -58,13 +60,18 @@ _specialist = Agent(
 # It has output_schema but no google_search — keeping function calling and built-in tools separate.
 root_agent = Agent(
     name="person_orchestrator",
+    # model: gemini-2.5-flash (not -lite) because the orchestrator is performing a complex
+    # structure mapping: calling a specialist, parsing arbitrary text, and formatting it
+    # exactly to the output_schema. Structured formatting benefits from a stronger model.
     model="gemini-2.5-flash",
     description="Delegates research to person_specialist, then formats the result as PersonInfo.",
-    instruction=(
-        # Orchestrator always delegates searching to the specialist, then formats the output.
-        "Call person_specialist with the person's name to gather research.\n"
-        "Then format the result into PersonInfo fields; use 0 for unknown age, 'unknown' for other missing fields."
-    ),
+    instruction="""
+Call person_specialist with the person's name to gather research.
+Then format the result into PersonInfo fields:
+  - Use 0 for unknown age.
+  - Use 'unknown' for other missing fields.
+  - Keep the biography field to at most two sentences.
+""",
     tools=[
         # AgentTool wraps _specialist — the orchestrator calls it like a Python function.
         # skip_summarization=True passes the specialist's full output back without trimming.

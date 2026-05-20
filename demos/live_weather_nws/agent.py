@@ -7,7 +7,8 @@ import requests
 from google.adk import Agent
 
 # Custom User-Agent header required by api.weather.gov — they block requests without one.
-# This identifies our app politely to the NWS server.
+# A User-Agent is a short identifier string your app sends with every HTTP request so the
+# server knows which client is calling (like a name tag for your program).
 _HEADERS = {"User-Agent": "(adk-workshop, local-demo)"}
 
 # Small lat/lon lookup table so learners don't need a geocoding API.
@@ -72,12 +73,12 @@ def get_live_forecast(city: str) -> dict:
   # Step 1: Call the NWS /points endpoint to get the forecast URL for these
   # coordinates. The API requires two hops: first metadata, then forecast details.
   try:
-    p = requests.get(
+    points_resp = requests.get(
         f"https://api.weather.gov/points/{lat},{lon}",
         headers=_HEADERS,
         timeout=10,  # Fail after 10 seconds rather than hanging forever.
     )
-    p.raise_for_status()
+    points_resp.raise_for_status()
   except requests.RequestException as exc:
     return {
       "status": "error",
@@ -86,7 +87,7 @@ def get_live_forecast(city: str) -> dict:
 
   try:
     # Extract the forecast URL from the JSON response's "properties" section.
-    forecast_payload = p.json()
+    forecast_payload = points_resp.json()
     properties = forecast_payload.get("properties")
   except (ValueError, TypeError, AttributeError) as exc:
     return {
@@ -97,7 +98,7 @@ def get_live_forecast(city: str) -> dict:
   if not isinstance(properties, dict):
     return {
       "status": "error",
-      "error_message": "Invalid forecast metadata response: properties",
+      "error_message": "Invalid forecast metadata response: 'properties' field is not a dict.",
     }
 
   forecast_url = properties.get("forecast")
@@ -109,8 +110,8 @@ def get_live_forecast(city: str) -> dict:
 
   # Step 2: Fetch the actual forecast from the URL we just retrieved.
   try:
-    f = requests.get(forecast_url, headers=_HEADERS, timeout=10)
-    f.raise_for_status()
+    forecast_resp = requests.get(forecast_url, headers=_HEADERS, timeout=10)
+    forecast_resp.raise_for_status()
   except requests.RequestException as exc:
     return {
       "status": "error",
@@ -118,7 +119,7 @@ def get_live_forecast(city: str) -> dict:
     }
 
   try:
-    periods = f.json().get("properties", {}).get("periods", [])
+    periods = forecast_resp.json().get("properties", {}).get("periods", [])
   except (ValueError, TypeError) as exc:
     return {
       "status": "error",
@@ -154,7 +155,8 @@ root_agent = Agent(
     # name: Unique identifier for this agent.
     name="nws_weather_agent",
 
-    # model: Gemini model that decides to call get_live_forecast based on the user's message.
+    # model: gemini-2.5-flash (not -lite) because structured multi-hop API responses and
+    # detailed forecast payloads require stronger reasoning than the lighter model provides.
     model="gemini-2.5-flash",
 
     # description: Used by orchestrators to decide when to route requests here.

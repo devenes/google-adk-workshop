@@ -1,12 +1,30 @@
 """Multi-agent workshop demo: coordinator delegates to specialists."""
 
-# random is Python's standard library for generating random numbers.
-import random
-import math
+# --- Standard library imports ---
+import math    # For math.isfinite() — guards against nan/inf inputs.
+import random  # For random.randint() — used in roll_die.
 
+# --- Third-party / ADK imports ---
+# Agent is the core ADK class for building individual agents.
+from google.adk import Agent
+
+# types from google.genai lets us configure safety filters and content generation settings.
+from google.genai import types
+
+
+# --- Private helpers ---
+# _coerce_int converts loosely-typed inputs to a clean Python int.
+# It is a private helper (not a tool) — learners should not list it in tools=[].
 
 def _coerce_int(value: object) -> int | None:
-  """Try converting a value into an integer for safe tool arithmetic."""
+  """Try converting a value into an integer for safe tool arithmetic.
+
+  Rejects booleans (True/False would otherwise coerce to 1/0),
+  non-numeric types, NaN, Infinity, and fractional values.
+
+  Returns:
+      A plain int, or None if the conversion is not safe.
+  """
   if isinstance(value, bool):
     return None
   try:
@@ -18,12 +36,6 @@ def _coerce_int(value: object) -> int | None:
   if not number.is_integer():
     return None
   return int(number)
-
-# Agent is the core ADK class for building individual agents.
-from google.adk import Agent
-
-# types from google.genai lets us configure safety filters and content generation settings.
-from google.genai import types
 
 
 # --- Tool: roll_die ---
@@ -47,7 +59,16 @@ def roll_die(sides: int) -> int | str:
 
 # --- Tool: check_prime ---
 def check_prime(nums: list[int]) -> str:
-  """Check which numbers in the list are prime."""
+  """Check which numbers in the list are prime.
+
+  Args:
+      nums: List of integers to test for primality. Must be a list;
+            booleans and non-integer floats are rejected individually.
+
+  Returns:
+      A comma-separated string of primes found, e.g. '2, 3, 5 are prime numbers.',
+      or 'No prime numbers found.' if none qualify.
+  """
   if not isinstance(nums, list):
     return "Invalid input: check_prime expects a list of integers."
 

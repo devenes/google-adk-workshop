@@ -1,8 +1,8 @@
 """Expert demo: planner → LoopAgent(critic ↔ refiner) with exit_loop (no Search).
 
 Mirrors the "Iterative Ideas with LoopAgent" section in
-``notebooks/ADK_Learning_tool_multi_agents.ipynb`` with a smaller, classroom-safe
-loop (no live web lookup required).
+the ADK notebook tutorials, offering a classroom-safe, fast loop
+(no live web lookup required).
 """
 
 # Agent is the standard single-model agent.
@@ -67,9 +67,10 @@ _refiner = Agent(
         "exit_loop tool once and produce no other text.\n"
         "Otherwise output a revised two-bullet plan (same format as before) "
         "do not call exit_loop."
-        # output_key overwrites current_plan with the refined version for the next iteration.
     ),
-    output_key="current_plan",  # Updated plan is saved back for the next critic pass.
+    # output_key overwrites current_plan in session state with the refined version
+    # for the next critic iteration pass.
+    output_key="current_plan",
 )
 
 # --- Loop: Critic + Refiner iterate together ---
@@ -77,7 +78,10 @@ _refiner = Agent(
 _refinement_loop = LoopAgent(
     name="refinement_loop",
     sub_agents=[_critic, _refiner],  # Order matters: critic runs first each iteration.
-    max_iterations=3,                # Safety cap — prevents infinite loops in the demo.
+    # max_iterations: Safety cap preventing infinite loops in the demo.
+    # If the limit is reached without calling exit_loop, the LoopAgent stops and
+    # the last value of current_plan is returned as the final output.
+    max_iterations=3,
 )
 
 # --- Root Agent: Full Pipeline ---
