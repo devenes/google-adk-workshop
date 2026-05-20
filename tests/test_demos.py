@@ -33,6 +33,10 @@ DEMO_NAMES = [
     "hitl_sensitive_action",
     "loop_plan_refine",
     "parallel_research_synth",
+    "structured_input_agent",
+    "few_shot_translator",
+    "code_execution_agent",
+    "grounded_qa_agent",
 ]
 
 
@@ -155,7 +159,7 @@ def test_custom_tools_function_tools():
 
 def test_calculator_tools():
   root = _load_demo_module("calculator_basics").root_agent
-  assert root.tools and len(root.tools) == 2
+  assert root.tools and len(root.tools) == 4
   mod = _load_demo_module("calculator_basics")
   assert mod.add_numbers(2, 3) == 5
   assert mod.add_numbers(2.5, 2.5) == 5
@@ -171,6 +175,14 @@ def test_calculator_tools():
   assert mod.add_numbers(float("inf"), 1) == (
       "Invalid input: add_numbers expects two numeric values."
   )
+  assert mod.subtract_numbers(10, 3) == 7
+  assert mod.subtract_numbers(0.5, 0.2) == pytest.approx(0.3)
+  assert mod.subtract_numbers(True, 1) == (
+      "Invalid input: subtract_numbers expects two numeric values."
+  )
+  assert mod.subtract_numbers("x", 1) == (
+      "Invalid input: subtract_numbers expects two numeric values."
+  )
   assert mod.multiply_numbers(2, 3) == 6
   assert mod.multiply_numbers("2", 2.5) == 5
   assert mod.multiply_numbers("bad", 2) == (
@@ -182,6 +194,16 @@ def test_calculator_tools():
   assert mod.multiply_numbers(float("-inf"), 2) == (
       "Invalid input: multiply_numbers expects two numeric values."
   )
+  assert mod.divide_numbers(10, 2) == 5.0
+  assert mod.divide_numbers(7, 2) == 3.5
+  assert mod.divide_numbers(5, 0) == "Cannot divide by zero."
+  assert mod.divide_numbers(True, 2) == (
+      "Invalid input: divide_numbers expects two numeric values."
+  )
+  assert mod.divide_numbers(float("inf"), 2) == (
+      "Invalid input: divide_numbers expects two numeric values."
+  )
+
 
 
 def test_static_kb_one_tool():
@@ -210,6 +232,32 @@ def test_sequential_has_two_llm_children():
 def test_structured_output_schema():
   root = _load_demo_module("structured_output").root_agent
   assert root.output_schema is not None
+
+
+def test_structured_input_and_output_schemas():
+  root = _load_demo_module("structured_input_agent").root_agent
+  assert root.input_schema is not None
+  assert root.output_schema is not None
+  assert root.input_schema.__name__ == "UserActivityLog"
+  assert root.output_schema.__name__ == "UserAnalysisReport"
+
+
+def test_few_shot_translator_instructions():
+  root = _load_demo_module("few_shot_translator").root_agent
+  assert "--- Examples ---" in root.instruction
+  assert "[TONE:" in root.instruction
+
+
+def test_code_execution_agent_config():
+  root = _load_demo_module("code_execution_agent").root_agent
+  assert root.code_executor is not None
+  assert root.code_executor.__class__.__name__ == "BuiltInCodeExecutor"
+
+
+def test_grounded_qa_agent_config():
+  root = _load_demo_module("grounded_qa_agent").root_agent
+  assert len(root.tools) == 1
+  assert root.tools[0].__class__.__name__ == "UrlContextTool"
 
 
 def test_hitl_has_send_email_tool():
@@ -444,8 +492,15 @@ def test_custom_tools_input_validation():
       "status": "error",
       "error_message": "City value is empty. Please provide a city name.",
   }
+  # All supported cities should return success
+  for city in ("New York", "London", "Tokyo", "Chicago", "Los Angeles", "Paris"):
+    assert mod.get_weather(city)["status"] == "success", f"Expected success for {city}"
   assert mod.get_weather("New York, TX")["status"] == "success"
-  assert mod.get_weather("New York")["status"] == "success"
+  # Unsupported city should list supported options in the error message
+  result = mod.get_weather("Atlantis")
+  assert result["status"] == "error"
+  assert "london" in result["error_message"].lower()
+
   assert mod.get_current_time(123) == {
       "status": "error",
       "error_message": "Invalid city value 123. Please provide a city name as text.",
@@ -462,7 +517,11 @@ def test_custom_tools_input_validation():
       "status": "error",
       "error_message": "City value is empty. Please provide a city name.",
   }
+  # All supported cities should return success
+  for city in ("New York", "London", "Tokyo", "Chicago", "Los Angeles", "Paris"):
+    assert mod.get_current_time(city)["status"] == "success", f"Expected success for {city}"
   assert mod.get_current_time("New York, TX")["status"] == "success"
+
 
 
 def test_static_kb_input_validation():
