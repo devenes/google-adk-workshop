@@ -20,6 +20,10 @@ From **`cd demos && adk web .`**, pick an app and verify:
 | hitl_sensitive_action          | Sensitive demo flow          | Confirmation when configured                        |
 | loop_plan_refine               | Improve a short plan         | Loop / critic pattern                               |
 | parallel_research_synth         | City weekend plan            | Parallel agents + synthesis                         |
+| structured_input_agent         | Activity log analysis request| Response matches analysis output schema            |
+| few_shot_translator            | "I'd like to check out now"   | Translations + tone tag in brackets                 |
+| code_execution_agent           | "Sum of primes under 50"     | Output verified via Python code execution          |
+| grounded_qa_agent              | "Summarize https://example.com"| Fetches and outputs information from the URL        |
 
 ## Workshop command contract
 
